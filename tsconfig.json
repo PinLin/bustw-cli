@@ -1,11 +1,18 @@
 {
-	"extends": "@sindresorhus/tsconfig",
 	"compilerOptions": {
+		"module": "commonjs",
+		"declaration": true,
+		"removeComments": true,
+		"emitDecoratorMetadata": true,
+		"experimentalDecorators": true,
+		"target": "es2017",
+		"sourceMap": true,
+		"incremental": true,
 		"jsx": "react",
 		"esModuleInterop": true,
 		"noUnusedLocals": false,
 		"noUnusedParameters": false,
+		"rootDir": "source",
 		"outDir": "dist"
-	},
-	"include": ["source"]
+	}
 }
