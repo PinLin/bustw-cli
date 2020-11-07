@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
-import { Introduction } from './page/introduction';
+import { SelectCity } from './page/select-city';
 
 const App: FC<{ name?: string }> = ({ name = 'Stranger' }) => (
-    <Introduction />
+    <SelectCity />
 );
 
 module.exports = App;
