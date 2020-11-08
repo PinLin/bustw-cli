@@ -7,7 +7,4 @@ export class DataVersion {
 
   @Column()
   versionId: number;
-
-  @Column()
-  updateTime: Date;
 }

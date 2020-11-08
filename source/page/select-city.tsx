@@ -26,12 +26,16 @@ export const SelectCity: FC<SelectCityProps> = (props) => {
         await Promise.all(cities.map(async (city) => {
             setCityState(city, SelectCityActionType.CheckingVersion );
 
-            const newDataVersion = await getDataVersion(city);
-            await repository.save({ city, ...newDataVersion });
+            const oldVersionId = (await repository.findOne(city))?.versionId ?? 0;
+            const newVersionId = (await getDataVersion(city)).versionId;
+            if (newVersionId > oldVersionId) {
+                await repository.save({ city, versionId: newVersionId });
 
-            setCityState(city, SelectCityActionType.DownloadingData );
+                setCityState(city, SelectCityActionType.DownloadingData );
 
-            await new Promise((res) => { setTimeout(() => { res() }, Math.random() * 3000 + 1000) });
+                // TODO: 把下面這句改為更新路線資料
+                await new Promise((res) => { setTimeout(() => { res() }, Math.random() * 3000 + 1000) });
+            }
 
             setCityState(city, SelectCityActionType.None );
         }));
