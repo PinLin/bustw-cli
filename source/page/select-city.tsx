@@ -21,9 +21,21 @@ export const SelectCity: FC<SelectCityProps> = (props) => {
     const handleSubmit = async (items: ListedItem[]) => {
         setSubmitted(true);
 
-        const cities = items.map((item) => (item.value.toString()));
+        const selectedCities = items.map((item) => (item.value.toString()));
 
         await Promise.all(cities.map(async (city) => {
+            // 如果沒有選擇該縣市
+            if (!selectedCities.includes(city)) {
+                setCityState(city, SelectCityActionType.DeletingData);
+
+                // 移除該縣市的路線資料
+                await getRepository(DataVersion).delete({ city });
+                await getRepository(BusRoute).delete({ city });
+
+                setCityState(city, SelectCityActionType.None);
+                return;
+            }
+
             setCityState(city, SelectCityActionType.CheckingVersion);
 
             // 檢查該縣市的路線資料版本是否過時
@@ -42,7 +54,7 @@ export const SelectCity: FC<SelectCityProps> = (props) => {
             setCityState(city, SelectCityActionType.SavingData);
 
             // 移除該縣市的路線資料
-            getRepository(BusRoute).delete({ city });
+            await getRepository(BusRoute).delete({ city });
 
             // 儲存該縣市的路線資料
             await Promise.all(busRoutes.map(async (busRoute) => {
@@ -69,13 +81,16 @@ export const SelectCity: FC<SelectCityProps> = (props) => {
         for (const [city, state] of cityState.entries()) {
             let text: string;
             if (state == SelectCityActionType.CheckingVersion) {
-                text = ` 🔍  正在檢查${getCityChineseName(city)}的路線資料版本...`;
+                text = ` 🔍 正在檢查${getCityChineseName(city)}的路線資料版本...`;
             }
             if (state == SelectCityActionType.DownloadingData) {
                 text = ` ⬇️  正在下載${getCityChineseName(city)}的路線資料...`;
             }
             if (state == SelectCityActionType.SavingData) {
                 text = ` 💾 正在儲存${getCityChineseName(city)}的路線資料...`;
+            }
+            if (state == SelectCityActionType.DeletingData) {
+                text = ` ♻️  正在刪除${getCityChineseName(city)}的路線資料...`;
             }
             components.push(
                 <Text key={city}>
