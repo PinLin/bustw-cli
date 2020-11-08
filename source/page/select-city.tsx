@@ -1,4 +1,4 @@
-import React, { FC, useReducer, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { Newline, Text } from 'ink';
 import MultiSelect, { ListedItem } from 'ink-multi-select';
 import Spinner from 'ink-spinner';
@@ -20,7 +20,6 @@ export const SelectCity: FC<SelectCityProps> = (props) => {
         setSubmitted(true);
 
         const cities = items.map((item) => (item.value.toString()));
-        setCityState({ type: SelectCityActionType.Initialize, value: cities });
 
         const repository = getRepository(DataVersion);
 
@@ -31,6 +30,10 @@ export const SelectCity: FC<SelectCityProps> = (props) => {
             await repository.save({ city, ...newDataVersion });
 
             setCityState({ type: SelectCityActionType.DownloadingData, value: city });
+
+            await new Promise((res) => { setTimeout(() => { res() }, Math.random() * 3000 + 1000) });
+
+            setCityState({ type: SelectCityActionType.None, value: city });
         }));
 
         if (props.onSuccess) {
@@ -41,7 +44,7 @@ export const SelectCity: FC<SelectCityProps> = (props) => {
     if (submitted) {
         const components = [] as JSX.Element[];
         for (const [city, state] of cityState.entries()) {
-            if (state.checkingVersion) {
+            if (state == SelectCityActionType.CheckingVersion) {
                 components.push(
                     <Text key={city}>
                         <Text color="green">
@@ -51,7 +54,7 @@ export const SelectCity: FC<SelectCityProps> = (props) => {
                     </Text>
                 );
             }
-            if (state.downloadingData) {
+            if (state == SelectCityActionType.DownloadingData) {
                 components.push(
                     <Text key={city}>
                         <Text color="green">

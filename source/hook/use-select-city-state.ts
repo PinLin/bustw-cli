@@ -1,33 +1,24 @@
 import { useReducer, useState } from 'react';
 
 export enum SelectCityActionType {
-    Initialize,
+    None,
     CheckingVersion,
     DownloadingData,
-    Finish,
 }
 
 export function useSelectCityState() {
     const [, forceUpdate] = useState({});
 
-    const reducer = (stateMap: Map<string, {
-        checkingVersion: boolean,
-        downloadingData: boolean,
-    }>, action: { type: SelectCityActionType, value: string | string[] }) => {
-        if (action.type == SelectCityActionType.Initialize) {
-            for (const city of action.value as string[]) {
-                stateMap.set(city, {
-                    checkingVersion: false,
-                    downloadingData: false,
-                });
-            }
+    const reducer = (stateMap: Map<string, SelectCityActionType>, action: { type: SelectCityActionType, value: string }) => {
+        const city = action.value as string;
+        const state = action.type;
+
+        if (action.type == SelectCityActionType.None) {
+            stateMap.delete(city);
         } else {
-            const city = action.value as string;
-            stateMap.set(city, {
-                checkingVersion: action.type == SelectCityActionType.CheckingVersion,
-                downloadingData: action.type == SelectCityActionType.DownloadingData,
-            });
+            stateMap.set(city, state);
         }
+
         forceUpdate({});
         return stateMap;
     }
