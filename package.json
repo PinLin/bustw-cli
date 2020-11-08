@@ -16,10 +16,15 @@
 		"dist/cli.js"
 	],
 	"dependencies": {
+		"@types/axios": "^0.14.0",
+		"axios": "^0.21.0",
 		"ink": "^3.0.8",
 		"ink-multi-select": "^2.0.0",
+		"ink-spinner": "^4.0.1",
 		"meow": "^8.0.0",
-		"react": "^17.0.1"
+		"react": "^17.0.1",
+		"sqlite3": "^5.0.0",
+		"typeorm": "^0.2.29"
 	},
 	"devDependencies": {
 		"@ava/typescript": "^1.1.1",
