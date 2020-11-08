@@ -6,59 +6,31 @@ import { cities, getCityChineseName } from '../util/city';
 import { getRepository } from 'typeorm';
 import { DataVersion } from '../entity/data-version';
 import { getDataVersion } from '../service/api-service';
+import { SelectCityActionType, useSelectCityState } from '../hook/use-select-city-state';
 
 export interface SelectCityProps {
     onSuccess?: (() => void);
 }
 
 export const SelectCity: FC<SelectCityProps> = (props) => {
-    const [, forceUpdate] = useState({});
     const [submitted, setSubmitted] = useState(false);
-    const [cityState, setCityState] = useReducer((stateMap: Map<string, {
-        checkingVersion: boolean,
-        downloadingData: boolean,
-    }>, action: { type: string, value: string | string[] }) => {
-        switch (action.type) {
-            case 'init':
-                for (const city of action.value as string[]) {
-                    stateMap.set(city, {
-                        checkingVersion: true,
-                        downloadingData: false,
-                    });
-                }
-                return stateMap;
-            case 'continue':
-                stateMap.set(action.value as string, {
-                    checkingVersion: false,
-                    downloadingData: true,
-                });
-                return stateMap;
-            case 'finish':
-                stateMap.set(action.value as string, {
-                    checkingVersion: true,
-                    downloadingData: false,
-                });
-                return stateMap;
-            default:
-                throw new Error();
-        }
-    }, new Map());
+    const [cityState, setCityState] = useSelectCityState();
 
     const handleSubmit = async (items: ListedItem[]) => {
         setSubmitted(true);
 
         const cities = items.map((item) => (item.value.toString()));
-        setCityState({ type: 'init', value: cities });
-        forceUpdate({});
+        setCityState({ type: SelectCityActionType.Initialize, value: cities });
 
         const repository = getRepository(DataVersion);
 
         await Promise.all(cities.map(async (city) => {
+            setCityState({ type: SelectCityActionType.CheckingVersion, value: city });
+
             const newDataVersion = await getDataVersion(city);
             await repository.save({ city, ...newDataVersion });
 
-            setCityState({ type: 'continue', value: city });
-            forceUpdate({});
+            setCityState({ type: SelectCityActionType.DownloadingData, value: city });
         }));
 
         if (props.onSuccess) {
