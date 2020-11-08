@@ -8,6 +8,8 @@ import meow from 'meow';
 import App from './ui';
 import { createConnection } from 'typeorm';
 import { DataVersion } from './entity/data-version';
+import { BusRoute } from './entity/bus-route';
+import { BusSubRoute } from './entity/bus-sub-route';
 
 const cli = meow(`
     Usage
@@ -36,7 +38,9 @@ const cli = meow(`
         await createConnection({
             type: 'sqlite',
             database: `${os.homedir()}/.bustw-cli/data.db`,
-            entities: [DataVersion],
+            entities: [
+                DataVersion, BusRoute, BusSubRoute,
+            ],
             logging: false,
             synchronize: true,
         });

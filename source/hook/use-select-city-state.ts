@@ -4,6 +4,7 @@ export enum SelectCityActionType {
     None,
     CheckingVersion,
     DownloadingData,
+    SavingData,
 }
 
 export function useSelectCityState() {
