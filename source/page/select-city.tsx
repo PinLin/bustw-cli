@@ -39,6 +39,8 @@ export const SelectCity: FC<SelectCityProps> = (props) => {
 
             setCityState(city, SelectCityActionType.SavingData);
 
+            getRepository(BusRoute).delete({ city });
+
             await Promise.all(busRoutes.map(async (busRoute) => {
                 await getRepository(BusRoute).save(busRoute);
                 busRoute.subRoutes.map(async (busSubRoute) => {
