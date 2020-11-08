@@ -53,13 +53,13 @@ export const SelectCity: FC<SelectCityProps> = (props) => {
 
         const repository = getRepository(DataVersion);
 
-        cities.map(async (city) => {
+        await Promise.all(cities.map(async (city) => {
             const newDataVersion = await getDataVersion(city);
             await repository.save({ city, ...newDataVersion });
 
             setCityState({ type: 'continue', value: city });
             forceUpdate({});
-        });
+        }));
 
         if (props.onSuccess) {
             props.onSuccess()
