@@ -8,6 +8,8 @@ export enum SelectCityActionType {
 }
 
 export function useSelectCityState() {
+    // 因為 useReducer 的 state 更新時畫面不會更新，所以建立一個無意義的
+    // useState，在需要更新畫面時呼叫他的 setState 來強制更新畫面。
     const [, forceUpdate] = useState({});
 
     const reducer = (stateMap: Map<string, SelectCityActionType>, action: {
@@ -24,7 +26,6 @@ export function useSelectCityState() {
         forceUpdate({});
         return stateMap;
     }
-
     const [state, dispatch] = useReducer(reducer, new Map());
     const setState = (city: string, state: SelectCityActionType) => {
         dispatch({ city, state });

@@ -26,6 +26,7 @@ export const SelectCity: FC<SelectCityProps> = (props) => {
         await Promise.all(cities.map(async (city) => {
             setCityState(city, SelectCityActionType.CheckingVersion);
 
+            // 檢查該縣市的路線資料版本是否過時
             const oldVersionId = (await getRepository(DataVersion).findOne(city))?.versionId ?? 0;
             const newVersionId = (await getDataVersion(city)).versionId;
             if (newVersionId <= oldVersionId) {
@@ -35,12 +36,15 @@ export const SelectCity: FC<SelectCityProps> = (props) => {
 
             setCityState(city, SelectCityActionType.DownloadingData);
 
+            // 下載該縣市的路線資料
             const busRoutes = (await getBusRoutes(city)).routes;
 
             setCityState(city, SelectCityActionType.SavingData);
 
+            // 移除該縣市的路線資料
             getRepository(BusRoute).delete({ city });
 
+            // 儲存該縣市的路線資料
             await Promise.all(busRoutes.map(async (busRoute) => {
                 await getRepository(BusRoute).save(busRoute);
                 busRoute.subRoutes.map(async (busSubRoute) => {
@@ -50,7 +54,6 @@ export const SelectCity: FC<SelectCityProps> = (props) => {
                     });
                 });
             }));
-
             await getRepository(DataVersion).save({ city, versionId: newVersionId });
 
             setCityState(city, SelectCityActionType.None);
