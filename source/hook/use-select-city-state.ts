@@ -9,11 +9,12 @@ export enum SelectCityActionType {
 export function useSelectCityState() {
     const [, forceUpdate] = useState({});
 
-    const reducer = (stateMap: Map<string, SelectCityActionType>, action: { type: SelectCityActionType, value: string }) => {
-        const city = action.value as string;
-        const state = action.type;
-
-        if (action.type == SelectCityActionType.None) {
+    const reducer = (stateMap: Map<string, SelectCityActionType>, action: {
+        city: string
+        state: SelectCityActionType,
+    }) => {
+        const { city, state } = action;
+        if (state == SelectCityActionType.None) {
             stateMap.delete(city);
         } else {
             stateMap.set(city, state);
@@ -23,5 +24,10 @@ export function useSelectCityState() {
         return stateMap;
     }
 
-    return useReducer(reducer, new Map());
+    const [state, dispatch] = useReducer(reducer, new Map());
+    const setState = (city: string, state: SelectCityActionType) => {
+        dispatch({ city, state });
+    };
+
+    return [state, setState] as [Map<string, SelectCityActionType>, (city: string, state: SelectCityActionType) => void];
 }

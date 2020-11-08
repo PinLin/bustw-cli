@@ -24,16 +24,16 @@ export const SelectCity: FC<SelectCityProps> = (props) => {
         const repository = getRepository(DataVersion);
 
         await Promise.all(cities.map(async (city) => {
-            setCityState({ type: SelectCityActionType.CheckingVersion, value: city });
+            setCityState(city, SelectCityActionType.CheckingVersion );
 
             const newDataVersion = await getDataVersion(city);
             await repository.save({ city, ...newDataVersion });
 
-            setCityState({ type: SelectCityActionType.DownloadingData, value: city });
+            setCityState(city, SelectCityActionType.DownloadingData );
 
             await new Promise((res) => { setTimeout(() => { res() }, Math.random() * 3000 + 1000) });
 
-            setCityState({ type: SelectCityActionType.None, value: city });
+            setCityState(city, SelectCityActionType.None );
         }));
 
         if (props.onSuccess) {
