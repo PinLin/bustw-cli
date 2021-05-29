@@ -1,12 +1,13 @@
 import React, { FC, useState } from 'react';
-import { Newline, Text } from 'ink';
+import { Text } from 'ink';
 import MultiSelect, { ListedItem } from 'ink-multi-select';
 import Spinner from 'ink-spinner';
+import useStdoutDimensions from 'ink-use-stdout-dimensions';
 import { cities, getCityChineseName } from '../util/city';
 import { getRepository } from 'typeorm';
 import { BusInfo } from '../entity/bus-info';
 import { getBusRoutes, getBusInfo } from '../service/api-service';
-import { SelectCityActionType, useSelectCityState } from '../hook/use-select-city-state';
+import { SelectCityState, useSelectCityState } from '../hook/use-select-city-state';
 import { BusRoute } from '../entity/bus-route';
 import { BusSubRoute } from '../entity/bus-sub-route';
 
@@ -15,6 +16,7 @@ export interface SelectCityProps {
 }
 
 export const SelectCity: FC<SelectCityProps> = (props) => {
+    const [columns, rows] = useStdoutDimensions();
     const [submitted, setSubmitted] = useState(false);
     const [cityState, setCityState] = useSelectCityState();
 
@@ -31,22 +33,22 @@ export const SelectCity: FC<SelectCityProps> = (props) => {
                 return;
             }
 
-            setCityState(city, SelectCityActionType.CheckingVersion);
+            setCityState(city, SelectCityState.CheckingVersion);
 
             // 檢查該縣市的路線資料版本是否過時
             const oldVersion = (await getRepository(BusInfo).findOne(city))?.routesVersion ?? 0;
             const newVersion = (await getBusInfo(city)).routesVersion;
             if (newVersion <= oldVersion) {
-                setCityState(city, SelectCityActionType.None);
+                setCityState(city, SelectCityState.None);
                 return;
             }
 
-            setCityState(city, SelectCityActionType.DownloadingData);
+            setCityState(city, SelectCityState.DownloadingData);
 
             // 下載該縣市的路線資料
             const busRoutes = (await getBusRoutes(city)).routes;
 
-            setCityState(city, SelectCityActionType.SavingData);
+            setCityState(city, SelectCityState.SavingData);
 
             // 移除該縣市的路線資料
             await getRepository(BusRoute).delete({ city });
@@ -63,11 +65,11 @@ export const SelectCity: FC<SelectCityProps> = (props) => {
             }));
             await getRepository(BusInfo).save({ city, routesVersion: newVersion });
 
-            setCityState(city, SelectCityActionType.None);
+            setCityState(city, SelectCityState.None);
         }));
 
         if (props.onSuccess) {
-            props.onSuccess()
+            props.onSuccess();
         }
     };
 
@@ -75,13 +77,13 @@ export const SelectCity: FC<SelectCityProps> = (props) => {
         const components = [] as JSX.Element[];
         for (const [city, state] of cityState.entries()) {
             let text: string;
-            if (state == SelectCityActionType.CheckingVersion) {
+            if (state == SelectCityState.CheckingVersion) {
                 text = ` 🔍 正在檢查${getCityChineseName(city)}的路線資料版本...`;
             }
-            if (state == SelectCityActionType.DownloadingData) {
+            if (state == SelectCityState.DownloadingData) {
                 text = ` ⬇️  正在下載${getCityChineseName(city)}的路線資料...`;
             }
-            if (state == SelectCityActionType.SavingData) {
+            if (state == SelectCityState.SavingData) {
                 text = ` 💾 正在儲存${getCityChineseName(city)}的路線資料...`;
             }
             components.push(
@@ -102,14 +104,10 @@ export const SelectCity: FC<SelectCityProps> = (props) => {
 
         return <>
             <Text>
-                <Text>
-                    <Text color="blue">?</Text>
-                    <Text bold> 🏙  請選擇要檢索的城市</Text>
-                </Text>
+                <Text bold> 🏙  請選擇要檢索的城市</Text>
                 <Text color="gray">（按下空白鍵來選擇，按下 Enter 來送出）</Text>
             </Text>
-            <Newline />
-            <MultiSelect items={items} /* defaultSelected={items} */ onSubmit={handleSubmit} />
+            <MultiSelect items={items} /* defaultSelected={items} */ onSubmit={handleSubmit} limit={rows - 1} />
         </>;
     }
 };

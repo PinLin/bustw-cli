@@ -1,6 +1,6 @@
 import { useReducer, useState } from 'react';
 
-export enum SelectCityActionType {
+export enum SelectCityState {
     None,
     CheckingVersion,
     DownloadingData,
@@ -12,12 +12,12 @@ export function useSelectCityState() {
     // useState，在需要更新畫面時呼叫他的 setState 來強制更新畫面。
     const [, forceUpdate] = useState({});
 
-    const reducer = (stateMap: Map<string, SelectCityActionType>, action: {
+    const reducer = (stateMap: Map<string, SelectCityState>, action: {
         city: string
-        state: SelectCityActionType,
+        state: SelectCityState,
     }) => {
         const { city, state } = action;
-        if (state == SelectCityActionType.None) {
+        if (state == SelectCityState.None) {
             stateMap.delete(city);
         } else {
             stateMap.set(city, state);
@@ -27,9 +27,9 @@ export function useSelectCityState() {
         return stateMap;
     }
     const [state, dispatch] = useReducer(reducer, new Map());
-    const setState = (city: string, state: SelectCityActionType) => {
+    const setState = (city: string, state: SelectCityState) => {
         dispatch({ city, state });
     };
 
-    return [state, setState] as [Map<string, SelectCityActionType>, (city: string, state: SelectCityActionType) => void];
+    return [state, setState] as [Map<string, SelectCityState>, (city: string, state: SelectCityState) => void];
 }

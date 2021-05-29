@@ -21,6 +21,7 @@
 		"ink": "^3.0.8",
 		"ink-multi-select": "^2.0.0",
 		"ink-spinner": "^4.0.1",
+		"ink-use-stdout-dimensions": "^1.0.5",
 		"meow": "^8.0.0",
 		"react": "^17.0.1",
 		"sqlite3": "^5.0.0",
