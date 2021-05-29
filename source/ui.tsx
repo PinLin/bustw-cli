@@ -1,10 +1,9 @@
 import React, { FC, useState } from 'react';
-import { Box } from 'ink';
+import { Text, Box } from 'ink';
 import useStdoutDimensions from 'ink-use-stdout-dimensions';
 import { getRepository } from 'typeorm';
 import { SelectCity } from './page/select-city';
 import { SearchRoute } from './page/search-route';
-import { Loading } from './page/loading';
 import { BusInfo } from './entity/bus-info';
 
 enum AppState {
@@ -18,7 +17,7 @@ const App: FC<{ name?: string }> = ({ name = 'Stranger' }) => {
     const [appState, setAppState] = useState(AppState.None);
     const [availableCities, setAvailableCities] = useState([] as string[]);
 
-    let page = <Loading />
+    let page = <Text />
     if (appState == AppState.None) {
         (async () => {
             setAvailableCities((await getRepository(BusInfo).find()).map(busInfo => busInfo.city));
