@@ -5,7 +5,6 @@ export enum SelectCityActionType {
     CheckingVersion,
     DownloadingData,
     SavingData,
-    DeletingData,
 }
 
 export function useSelectCityState() {

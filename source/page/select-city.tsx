@@ -26,13 +26,8 @@ export const SelectCity: FC<SelectCityProps> = (props) => {
         await Promise.all(cities.map(async (city) => {
             // 如果沒有選擇該縣市
             if (!selectedCities.includes(city)) {
-                setCityState(city, SelectCityActionType.DeletingData);
-
                 // 移除該縣市的路線資料
                 await getRepository(BusInfo).delete({ city });
-                await getRepository(BusRoute).delete({ city });
-
-                setCityState(city, SelectCityActionType.None);
                 return;
             }
 
@@ -88,9 +83,6 @@ export const SelectCity: FC<SelectCityProps> = (props) => {
             }
             if (state == SelectCityActionType.SavingData) {
                 text = ` 💾 正在儲存${getCityChineseName(city)}的路線資料...`;
-            }
-            if (state == SelectCityActionType.DeletingData) {
-                text = ` ♻️  正在刪除${getCityChineseName(city)}的路線資料...`;
             }
             components.push(
                 <Text key={city}>
