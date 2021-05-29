@@ -4,8 +4,8 @@ import MultiSelect, { ListedItem } from 'ink-multi-select';
 import Spinner from 'ink-spinner';
 import { cities, getCityChineseName } from '../util/city';
 import { getRepository } from 'typeorm';
-import { DataVersion } from '../entity/data-version';
-import { getBusRoutes, getDataVersion } from '../service/api-service';
+import { BusInfo } from '../entity/bus-info';
+import { getBusRoutes, getBusInfo } from '../service/api-service';
 import { SelectCityActionType, useSelectCityState } from '../hook/use-select-city-state';
 import { BusRoute } from '../entity/bus-route';
 import { BusSubRoute } from '../entity/bus-sub-route';
@@ -29,7 +29,7 @@ export const SelectCity: FC<SelectCityProps> = (props) => {
                 setCityState(city, SelectCityActionType.DeletingData);
 
                 // 移除該縣市的路線資料
-                await getRepository(DataVersion).delete({ city });
+                await getRepository(BusInfo).delete({ city });
                 await getRepository(BusRoute).delete({ city });
 
                 setCityState(city, SelectCityActionType.None);
@@ -39,9 +39,9 @@ export const SelectCity: FC<SelectCityProps> = (props) => {
             setCityState(city, SelectCityActionType.CheckingVersion);
 
             // 檢查該縣市的路線資料版本是否過時
-            const oldVersionId = (await getRepository(DataVersion).findOne(city))?.versionId ?? 0;
-            const newVersionId = (await getDataVersion(city)).versionId;
-            if (newVersionId <= oldVersionId) {
+            const oldVersion = (await getRepository(BusInfo).findOne(city))?.routesVersion ?? 0;
+            const newVersion = (await getBusInfo(city)).routesVersion;
+            if (newVersion <= oldVersion) {
                 setCityState(city, SelectCityActionType.None);
                 return;
             }
@@ -66,7 +66,7 @@ export const SelectCity: FC<SelectCityProps> = (props) => {
                     });
                 });
             }));
-            await getRepository(DataVersion).save({ city, versionId: newVersionId });
+            await getRepository(BusInfo).save({ city, routesVersion: newVersion });
 
             setCityState(city, SelectCityActionType.None);
         }));

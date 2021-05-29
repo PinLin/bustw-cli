@@ -1,10 +1,10 @@
 import { Column, Entity, PrimaryColumn } from 'typeorm';
 
 @Entity()
-export class DataVersion {
+export class BusInfo {
   @PrimaryColumn()
   city: string;
 
   @Column()
-  versionId: number;
+  routesVersion: number;
 }

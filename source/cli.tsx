@@ -7,7 +7,7 @@ import { render } from 'ink';
 import meow from 'meow';
 import App from './ui';
 import { createConnection } from 'typeorm';
-import { DataVersion } from './entity/data-version';
+import { BusInfo } from './entity/bus-info';
 import { BusRoute } from './entity/bus-route';
 import { BusSubRoute } from './entity/bus-sub-route';
 
@@ -39,7 +39,7 @@ const cli = meow(`
             type: 'sqlite',
             database: `${os.homedir()}/.bustw-cli/data.db`,
             entities: [
-                DataVersion, BusRoute, BusSubRoute,
+                BusInfo, BusRoute, BusSubRoute,
             ],
             logging: false,
             synchronize: true,
