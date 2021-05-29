@@ -16,7 +16,7 @@ export interface SearchRouteProps {
 export const SearchRoute: FC<SearchRouteProps> = (props) => {
     const [columns, rows] = useStdoutDimensions();
     const [query, setQuery] = useState('');
-    const [routeItems, setRouteItems] = useState([] as { label: string, value: BusRoute }[]);
+    const [routeItems, setRouteItems] = useState([] as { key: string, label: string, value: BusRoute }[]);
 
     const handleChangeQuery = async (label: string) => {
         const foundRoutes = await getRepository(BusRoute).find({
@@ -28,12 +28,13 @@ export const SearchRoute: FC<SearchRouteProps> = (props) => {
 
         setQuery(label);
         setRouteItems(foundRoutes.map(route => ({
+            key: route.id,
             label: `[${getCityChineseName(route.city)}] ${route.nameZhTw}`,
             value: route,
         })));
     };
     const handleHighlight = (routeItem: { label: string, value: BusRoute }) => {
-        setQuery(routeItem.value.nameZhTw);
+        setQuery(routeItem?.value.nameZhTw ?? '');
     };
     const handleSelect = (routeItem: { label: string, value: BusRoute }) => {
         if (props.onSuccess) {
