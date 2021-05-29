@@ -9,35 +9,35 @@ import { BusRoute } from '../entity/bus-route';
 import { getCityChineseName } from '../util/city';
 
 export interface SearchRouteProps {
-    onSuccess?: ((routeId: string) => void);
+    onSuccess?: ((city: string, routeId: string) => void);
+    availableCities: string[];
 }
 
 export const SearchRoute: FC<SearchRouteProps> = (props) => {
     const [columns, rows] = useStdoutDimensions();
     const [query, setQuery] = useState('');
-    const [routeItems, setRouteItems] = useState([] as { label: string, value: string }[]);
+    const [routeItems, setRouteItems] = useState([] as { label: string, value: BusRoute }[]);
 
     const handleChangeQuery = async (label: string) => {
-        const availableCities = (await getRepository(BusInfo).find()).map(busInfo => busInfo.city);
         const foundRoutes = await getRepository(BusRoute).find({
             where: {
                 nameZhTw: Like(`%${label}%`),
-                city: In(availableCities),
+                city: In(props.availableCities),
             },
         });
 
         setQuery(label);
         setRouteItems(foundRoutes.map(route => ({
             label: `[${getCityChineseName(route.city)}] ${route.nameZhTw}`,
-            value: route.id,
+            value: route,
         })));
     };
-    const handleHighlight = (routeItem: { label: string, value: string }) => {
-        setQuery(routeItem.label.split('] ')[1]);
+    const handleHighlight = (routeItem: { label: string, value: BusRoute }) => {
+        setQuery(routeItem.value.nameZhTw);
     };
-    const handleSelect = (routeItem: { label: string, value: string }) => {
+    const handleSelect = (routeItem: { label: string, value: BusRoute }) => {
         if (props.onSuccess) {
-            props.onSuccess(routeItem.value);
+            props.onSuccess(routeItem.value.city, routeItem.value.id);
         }
     };
 

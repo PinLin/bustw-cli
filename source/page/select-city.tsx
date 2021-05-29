@@ -12,7 +12,8 @@ import { BusRoute } from '../entity/bus-route';
 import { BusSubRoute } from '../entity/bus-sub-route';
 
 export interface SelectCityProps {
-    onSuccess?: (() => void);
+    onSuccess?: ((selectedCities: string[]) => void);
+    availableCities: string[];
 }
 
 export const SelectCity: FC<SelectCityProps> = (props) => {
@@ -69,7 +70,7 @@ export const SelectCity: FC<SelectCityProps> = (props) => {
         }));
 
         if (props.onSuccess) {
-            props.onSuccess();
+            props.onSuccess(selectedCities);
         }
     };
 
@@ -101,13 +102,17 @@ export const SelectCity: FC<SelectCityProps> = (props) => {
             label: getCityChineseName(city),
             value: city,
         }));
+        let selectedItems = items.filter(item => props.availableCities.includes(item.value));
+        if (selectedItems.length == 0) {
+            selectedItems = items;
+        }
 
         return <>
             <Text>
                 <Text bold> 🏙  請選擇要檢索的城市</Text>
                 <Text color="gray">（按下空白鍵來選擇，按下 Enter 來送出）</Text>
             </Text>
-            <MultiSelect items={items} /* defaultSelected={items} */ onSubmit={handleSubmit} limit={rows - 1} />
+            <MultiSelect items={items} defaultSelected={selectedItems} onSubmit={handleSubmit} limit={rows - 1} />
         </>;
     }
 };
