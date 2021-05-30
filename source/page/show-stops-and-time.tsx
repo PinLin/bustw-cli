@@ -2,6 +2,7 @@ import React, { FC, useState } from 'react';
 import { Text, useInput } from 'ink';
 import Spinner from 'ink-spinner';
 import { Tab, Tabs } from 'ink-tab';
+import Divider from 'ink-divider';
 import useStdoutDimensions from 'ink-use-stdout-dimensions';
 import { getRepository } from 'typeorm';
 import { BusRoute } from '../entity/bus-route';
@@ -14,14 +15,14 @@ export interface ShowStopsAndTimeProps {
 }
 
 export const ShowStopsAndTime: FC<ShowStopsAndTimeProps> = (props) => {
-    const [, height] = useStdoutDimensions();
+    const [width, height] = useStdoutDimensions();
     const [busRoute, setBusRoute] = useState(null as BusRoute);
     const [subRouteTabIndex, setSubRouteTabIndex] = useState(0);
     const [firstStopItemIndex, setFirstStopItemIndex] = useState(0);
     useInput((input, key) => {
         if (busRoute) {
             const stops = JSON.parse(busRoute.subRoutes[subRouteTabIndex].stopsJson);
-            if (key.downArrow && firstStopItemIndex + (height - 2) < stops.length) {
+            if (key.downArrow && firstStopItemIndex + (height - 5) < stops.length) {
                 setFirstStopItemIndex(firstStopItemIndex + 1);
             }
             if (key.upArrow && firstStopItemIndex > 0) {
@@ -32,7 +33,7 @@ export const ShowStopsAndTime: FC<ShowStopsAndTimeProps> = (props) => {
 
     if (busRoute) {
         return <>
-            <Text bold>{`[${getCityChineseName(busRoute.city)}] ${busRoute.nameZhTw}`}</Text>
+            <Divider width={width - 5} title={`[${getCityChineseName(busRoute.city)}] ${busRoute.nameZhTw}`} />
             <Tabs onChange={(name) => {
                 setSubRouteTabIndex(Number(name));
                 setFirstStopItemIndex(0);
@@ -40,13 +41,14 @@ export const ShowStopsAndTime: FC<ShowStopsAndTimeProps> = (props) => {
                 const stops = JSON.parse(subRoute.stopsJson) as BusStop[];
                 return <Tab name={index.toString()}>{`往${stops[stops.length - 1].nameZhTw}`}</Tab>
             })} />
+            <Divider width={width - 5} title={''} />
             {
                 JSON.parse(busRoute.subRoutes[subRouteTabIndex].stopsJson).map((stop) => {
                     return <Text>
                         <Text color="gray">［ 載入中 ］</Text>
                         <Text>{stop.nameZhTw}</Text>
                     </Text>
-                }).slice(firstStopItemIndex, firstStopItemIndex + (height - 2))
+                }).slice(firstStopItemIndex, firstStopItemIndex + (height - 5))
             }
         </>;
     } else {
