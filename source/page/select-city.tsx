@@ -61,6 +61,7 @@ export const SelectCity: FC<SelectCityProps> = (props) => {
                     await getRepository(BusSubRoute).save({
                         ...busSubRoute,
                         stopsJson: JSON.stringify(busSubRoute.stops),
+                        route: busRoute,
                     });
                 });
             }));
