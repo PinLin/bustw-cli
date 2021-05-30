@@ -14,7 +14,7 @@ export interface SearchRouteProps {
 }
 
 export const SearchRoute: FC<SearchRouteProps> = (props) => {
-    const [columns, rows] = useStdoutDimensions();
+    const [, height] = useStdoutDimensions();
     const [query, setQuery] = useState('');
     const [routeItems, setRouteItems] = useState([] as { key: string, label: string, value: BusRoute }[]);
 
@@ -53,7 +53,7 @@ export const SearchRoute: FC<SearchRouteProps> = (props) => {
                 items={routeItems}
                 onHighlight={handleHighlight}
                 onSelect={handleSelect}
-                limit={rows - 1}
+                limit={height - 1}
             />
         }
     </>;

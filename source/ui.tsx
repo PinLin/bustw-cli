@@ -15,7 +15,7 @@ enum AppState {
 }
 
 const App: FC<{ name?: string }> = ({ name = 'Stranger' }) => {
-    const [columns, rows] = useStdoutDimensions();
+    const [width, height] = useStdoutDimensions();
     const [appState, setAppState] = useState(AppState.None);
     const [availableCities, setAvailableCities] = useState([] as string[]);
     const [selectedCity, setSelectedCity] = useState('');
@@ -49,7 +49,7 @@ const App: FC<{ name?: string }> = ({ name = 'Stranger' }) => {
         page = <ShowStopsAndTime city={selectedCity} routeId={selectedRouteId} />
     }
 
-    return <Box width={columns} height={rows} flexDirection="column">
+    return <Box width={width} height={height} flexDirection="column">
         {page}
     </Box>
 };

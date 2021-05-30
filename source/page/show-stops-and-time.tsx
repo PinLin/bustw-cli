@@ -14,14 +14,14 @@ export interface ShowStopsAndTimeProps {
 }
 
 export const ShowStopsAndTime: FC<ShowStopsAndTimeProps> = (props) => {
-    const [columns, rows] = useStdoutDimensions();
+    const [, height] = useStdoutDimensions();
     const [busRoute, setBusRoute] = useState(null as BusRoute);
     const [subRouteTabIndex, setSubRouteTabIndex] = useState(0);
     const [firstStopItemIndex, setFirstStopItemIndex] = useState(0);
     useInput((input, key) => {
         if (busRoute) {
             const stops = JSON.parse(busRoute.subRoutes[subRouteTabIndex].stopsJson);
-            if (key.downArrow && firstStopItemIndex + (rows - 2) < stops.length) {
+            if (key.downArrow && firstStopItemIndex + (height - 2) < stops.length) {
                 setFirstStopItemIndex(firstStopItemIndex + 1);
             }
             if (key.upArrow && firstStopItemIndex > 0) {
@@ -46,7 +46,7 @@ export const ShowStopsAndTime: FC<ShowStopsAndTimeProps> = (props) => {
                         <Text color="gray">［ 載入中 ］</Text>
                         <Text>{stop.nameZhTw}</Text>
                     </Text>
-                }).slice(firstStopItemIndex, firstStopItemIndex + (rows - 2))
+                }).slice(firstStopItemIndex, firstStopItemIndex + (height - 2))
             }
         </>;
     } else {

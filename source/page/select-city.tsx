@@ -17,7 +17,7 @@ export interface SelectCityProps {
 }
 
 export const SelectCity: FC<SelectCityProps> = (props) => {
-    const [columns, rows] = useStdoutDimensions();
+    const [, height] = useStdoutDimensions();
     const [submitted, setSubmitted] = useState(false);
     const [cityState, setCityState] = useSelectCityState();
 
@@ -113,7 +113,7 @@ export const SelectCity: FC<SelectCityProps> = (props) => {
                 <Text bold> 🏙  請選擇要檢索的城市</Text>
                 <Text color="gray">（按下空白鍵來選擇，按下 Enter 來送出）</Text>
             </Text>
-            <MultiSelect items={items} defaultSelected={selectedItems} onSubmit={handleSubmit} limit={rows - 1} />
+            <MultiSelect items={items} defaultSelected={selectedItems} onSubmit={handleSubmit} limit={height - 1} />
         </>;
     }
 };
