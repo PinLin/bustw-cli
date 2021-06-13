@@ -31,6 +31,8 @@ const App: FC<{ name?: string }> = ({ name = 'Stranger' }) => {
             <SelectAvailableCities previousSelectedCities={availableCities} onSelect={(selectedCities) => {
                 setAvailableCities(selectedCities);
                 setAppState(AppState.SearchRoute);
+            }} onExit={() => {
+                setAppState(AppState.SearchRoute);
             }} />
         );
     }

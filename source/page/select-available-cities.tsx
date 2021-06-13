@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { Text } from 'ink';
+import { Text, useInput } from 'ink';
 import MultiSelect, { ListedItem } from 'ink-multi-select';
 import Spinner from 'ink-spinner';
 import useStdoutDimensions from 'ink-use-stdout-dimensions';
@@ -13,6 +13,7 @@ import { BusSubRoute } from '../entity/bus-sub-route';
 
 export interface SelectAvailableCitiesProps {
     onSelect?: (selectedCities: string[]) => void;
+    onExit?: () => void;
     previousSelectedCities: string[];
 }
 
@@ -20,6 +21,14 @@ export const SelectAvailableCities: FC<SelectAvailableCitiesProps> = (props) => 
     const [, height] = useStdoutDimensions();
     const [submitted, setSubmitted] = useState(false);
     const [citiesState, setCitiesState] = useCitiesState();
+
+    useInput((input, key) => {
+        if (key.escape || input == 'q') {
+            if (props.onExit) {
+                props.onExit();
+            }
+        }
+    });
 
     const handleSubmit = async (items: ListedItem[]) => {
         setSubmitted(true);
