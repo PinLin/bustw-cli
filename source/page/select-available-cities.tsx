@@ -7,19 +7,19 @@ import { cities, getCityChineseName } from '../util/city';
 import { getRepository } from 'typeorm';
 import { BusInfo } from '../entity/bus-info';
 import { getBusRoutes, getBusInfo } from '../service/api-service';
-import { SelectCityState, useSelectCityState } from '../hook/use-select-city-state';
+import { CityState, useCitiesState } from '../hook/use-cities-state';
 import { BusRoute } from '../entity/bus-route';
 import { BusSubRoute } from '../entity/bus-sub-route';
 
-export interface SelectCityProps {
-    onSuccess?: ((selectedCities: string[]) => void);
-    availableCities: string[];
+export interface SelectAvailableCitiesProps {
+    onSelected?: ((selectedCities: string[]) => void);
+    previousSelectedCities: string[];
 }
 
-export const SelectCity: FC<SelectCityProps> = (props) => {
+export const SelectAvailableCities: FC<SelectAvailableCitiesProps> = (props) => {
     const [, height] = useStdoutDimensions();
     const [submitted, setSubmitted] = useState(false);
-    const [cityState, setCityState] = useSelectCityState();
+    const [citiesState, setCitiesState] = useCitiesState();
 
     const handleSubmit = async (items: ListedItem[]) => {
         setSubmitted(true);
@@ -34,22 +34,22 @@ export const SelectCity: FC<SelectCityProps> = (props) => {
                 return;
             }
 
-            setCityState(city, SelectCityState.CheckingVersion);
+            setCitiesState(city, CityState.CheckingVersion);
 
             // 檢查該縣市的路線資料版本是否過時
             const oldVersion = (await getRepository(BusInfo).findOne(city))?.routesVersion ?? 0;
             const newVersion = (await getBusInfo(city)).routesVersion;
             if (newVersion <= oldVersion) {
-                setCityState(city, SelectCityState.None);
+                setCitiesState(city, CityState.None);
                 return;
             }
 
-            setCityState(city, SelectCityState.DownloadingData);
+            setCitiesState(city, CityState.DownloadingData);
 
             // 下載該縣市的路線資料
             const busRoutes = (await getBusRoutes(city)).routes;
 
-            setCityState(city, SelectCityState.SavingData);
+            setCitiesState(city, CityState.SavingData);
 
             // 移除該縣市的路線資料
             await getRepository(BusRoute).delete({ city });
@@ -67,25 +67,25 @@ export const SelectCity: FC<SelectCityProps> = (props) => {
             }));
             await getRepository(BusInfo).save({ city, routesVersion: newVersion });
 
-            setCityState(city, SelectCityState.None);
+            setCitiesState(city, CityState.None);
         }));
 
-        if (props.onSuccess) {
-            props.onSuccess(selectedCities);
+        if (props.onSelected) {
+            props.onSelected(selectedCities);
         }
     };
 
     if (submitted) {
         const components = [] as JSX.Element[];
-        for (const [city, state] of cityState.entries()) {
+        for (const [city, state] of citiesState.entries()) {
             let text: string;
-            if (state == SelectCityState.CheckingVersion) {
+            if (state == CityState.CheckingVersion) {
                 text = ` 🔍 正在檢查${getCityChineseName(city)}的路線資料版本...`;
             }
-            if (state == SelectCityState.DownloadingData) {
+            if (state == CityState.DownloadingData) {
                 text = ` ⬇️  正在下載${getCityChineseName(city)}的路線資料...`;
             }
-            if (state == SelectCityState.SavingData) {
+            if (state == CityState.SavingData) {
                 text = ` 💾 正在儲存${getCityChineseName(city)}的路線資料...`;
             }
             components.push(
@@ -103,7 +103,7 @@ export const SelectCity: FC<SelectCityProps> = (props) => {
             label: getCityChineseName(city),
             value: city,
         }));
-        let selectedItems = items.filter(item => props.availableCities.includes(item.value));
+        let selectedItems = items.filter(item => props.previousSelectedCities.includes(item.value));
         if (selectedItems.length == 0) {
             selectedItems = items;
         }

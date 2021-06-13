@@ -3,23 +3,23 @@ import { Text, Box } from 'ink';
 import useStdoutDimensions from 'ink-use-stdout-dimensions';
 import { getRepository } from 'typeorm';
 import { BusInfo } from './entity/bus-info';
-import { SelectCity } from './page/select-city';
+import { SelectAvailableCities } from './page/select-available-cities';
 import { SearchRoute } from './page/search-route';
-import { ShowStopsAndTime } from './page/show-stops-and-time';
+import { ShowStopsOfRoute } from './page/show-stops-of-route';
 
 enum AppState {
     None,
-    SelectCity,
+    SelectAvailableCities,
     SearchRoute,
-    ShowStopsAndTime,
+    ShowStopsOfRoute,
 }
 
 const App: FC<{ name?: string }> = ({ name = 'Stranger' }) => {
     const [width, height] = useStdoutDimensions();
     const [appState, setAppState] = useState(AppState.None);
     const [availableCities, setAvailableCities] = useState([] as string[]);
-    const [selectedCity, setSelectedCity] = useState('');
-    const [selectedRouteId, setSelectedRouteId] = useState('');
+    const [targetCity, setTargetCity] = useState('');
+    const [targetRouteId, setTargetRouteId] = useState('');
 
     let page = <Text />
     if (appState == AppState.None) {
@@ -28,25 +28,25 @@ const App: FC<{ name?: string }> = ({ name = 'Stranger' }) => {
             if (availableCities.length > 0) {
                 setAppState(AppState.SearchRoute);
             } else {
-                setAppState(AppState.SelectCity);
+                setAppState(AppState.SelectAvailableCities);
             }
         })()
     }
-    if (appState == AppState.SelectCity) {
-        page = <SelectCity availableCities={availableCities} onSuccess={(selectedCities) => {
+    if (appState == AppState.SelectAvailableCities) {
+        page = <SelectAvailableCities previousSelectedCities={availableCities} onSelected={(selectedCities) => {
             setAvailableCities(selectedCities);
             setAppState(AppState.SearchRoute);
         }} />
     }
     if (appState == AppState.SearchRoute) {
-        page = <SearchRoute availableCities={availableCities} onSuccess={(city, routeId) => {
-            setSelectedCity(city);
-            setSelectedRouteId(routeId);
-            setAppState(AppState.ShowStopsAndTime);
+        page = <SearchRoute availableCities={availableCities} onSelected={(city, routeId) => {
+            setTargetCity(city);
+            setTargetRouteId(routeId);
+            setAppState(AppState.ShowStopsOfRoute);
         }} />
     }
-    if (appState == AppState.ShowStopsAndTime) {
-        page = <ShowStopsAndTime city={selectedCity} routeId={selectedRouteId} />
+    if (appState == AppState.ShowStopsOfRoute) {
+        page = <ShowStopsOfRoute city={targetCity} routeId={targetRouteId} />
     }
 
     return <Box width={width} height={height} flexDirection="column">

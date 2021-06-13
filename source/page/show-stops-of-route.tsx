@@ -9,12 +9,12 @@ import { BusRoute } from '../entity/bus-route';
 import { BusStop } from '../entity/bus-stop';
 import { getCityChineseName } from '../util/city';
 
-export interface ShowStopsAndTimeProps {
+export interface ShowStopsOfRouteProps {
     city: string;
     routeId: string;
 }
 
-export const ShowStopsAndTime: FC<ShowStopsAndTimeProps> = (props) => {
+export const ShowStopsOfRoute: FC<ShowStopsOfRouteProps> = (props) => {
     const [width, height] = useStdoutDimensions();
     const [busRoute, setBusRoute] = useState(null as BusRoute);
     const [subRouteTabIndex, setSubRouteTabIndex] = useState(0);

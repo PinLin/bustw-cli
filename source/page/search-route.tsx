@@ -4,12 +4,11 @@ import TextInput from 'ink-text-input';
 import SelectInput from 'ink-select-input';
 import useStdoutDimensions from 'ink-use-stdout-dimensions';
 import { getRepository, In, Like } from 'typeorm';
-import { BusInfo } from '../entity/bus-info';
 import { BusRoute } from '../entity/bus-route';
 import { getCityChineseName } from '../util/city';
 
 export interface SearchRouteProps {
-    onSuccess?: ((city: string, routeId: string) => void);
+    onSelected?: ((city: string, routeId: string) => void);
     availableCities: string[];
 }
 
@@ -37,8 +36,8 @@ export const SearchRoute: FC<SearchRouteProps> = (props) => {
         setQuery(routeItem?.value.nameZhTw ?? '');
     };
     const handleSelect = (routeItem: { label: string, value: BusRoute }) => {
-        if (props.onSuccess) {
-            props.onSuccess(routeItem.value.city, routeItem.value.id);
+        if (props.onSelected) {
+            props.onSelected(routeItem.value.city, routeItem.value.id);
         }
     };
 
