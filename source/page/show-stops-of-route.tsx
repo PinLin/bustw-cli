@@ -10,6 +10,7 @@ import { BusStop } from '../entity/bus-stop';
 import { getCityChineseName } from '../util/city';
 
 export interface ShowStopsOfRouteProps {
+    onExit: () => void;
     city: string;
     routeId: string;
 }
@@ -27,6 +28,9 @@ export const ShowStopsOfRoute: FC<ShowStopsOfRouteProps> = (props) => {
             }
             if (key.upArrow && firstStopItemIndex > 0) {
                 setFirstStopItemIndex(firstStopItemIndex - 1);
+            }
+            if (key.escape || input == 'q') {
+                props.onExit();
             }
         }
     });

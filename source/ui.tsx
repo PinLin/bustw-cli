@@ -46,7 +46,10 @@ const App: FC<{ name?: string }> = ({ name = 'Stranger' }) => {
         }} />
     }
     if (appState == AppState.ShowStopsOfRoute) {
-        page = <ShowStopsOfRoute city={targetCity} routeId={targetRouteId} />
+        page = <ShowStopsOfRoute city={targetCity} routeId={targetRouteId}
+            onExit={() => {
+                setAppState(AppState.SearchRoute);
+            }} />
     }
 
     return <Box width={width} height={height} flexDirection="column">
