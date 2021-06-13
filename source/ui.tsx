@@ -35,28 +35,36 @@ const App: FC<{ name?: string }> = ({ name = 'Stranger' }) => {
         })()
     }
     if (appState == AppState.SelectAvailableCities) {
-        page = <SelectAvailableCities previousSelectedCities={availableCities} onSelected={(selectedCities) => {
-            setAvailableCities(selectedCities);
-            setAppState(AppState.SearchRoute);
-        }} />
-    }
-    if (appState == AppState.SearchRoute) {
-        page = <SearchRoute height={height} availableCities={availableCities} onSelected={(city, routeId) => {
-            setTargetCity(city);
-            setTargetRouteId(routeId);
-            setAppState(AppState.ShowStopsOfRoute);
-        }} />
-    }
-    if (appState == AppState.ShowStopsOfRoute) {
-        page = <ShowStopsOfRoute width={width < maxWidth ? width : maxWidth} height={height}
-            city={targetCity} routeId={targetRouteId} onExit={() => {
+        page = (
+            <SelectAvailableCities previousSelectedCities={availableCities} onSelected={(selectedCities) => {
+                setAvailableCities(selectedCities);
                 setAppState(AppState.SearchRoute);
             }} />
+        );
+    }
+    if (appState == AppState.SearchRoute) {
+        page = (
+            <SearchRoute height={height} availableCities={availableCities} onSelected={(city, routeId) => {
+                setTargetCity(city);
+                setTargetRouteId(routeId);
+                setAppState(AppState.ShowStopsOfRoute);
+            }} />
+        );
+    }
+    if (appState == AppState.ShowStopsOfRoute) {
+        page = (
+            <ShowStopsOfRoute width={width < maxWidth ? width : maxWidth} height={height}
+                city={targetCity} routeId={targetRouteId} onExit={() => {
+                    setAppState(AppState.SearchRoute);
+                }} />
+        );
     }
 
-    return <Box width={width < maxWidth ? width : maxWidth} height={height} flexDirection="column">
-        {page}
-    </Box>
+    return (
+        <Box width={width < maxWidth ? width : maxWidth} height={height} flexDirection="column">
+            {page}
+        </Box>
+    );
 };
 
 module.exports = App;

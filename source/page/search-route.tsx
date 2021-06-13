@@ -2,7 +2,6 @@ import React, { FC, useState } from 'react';
 import { Text } from 'ink';
 import TextInput from 'ink-text-input';
 import SelectInput from 'ink-select-input';
-import useStdoutDimensions from 'ink-use-stdout-dimensions';
 import { getRepository, In, Like } from 'typeorm';
 import { BusRoute } from '../entity/bus-route';
 import { getCityChineseName } from '../util/city';
@@ -44,19 +43,21 @@ export const SearchRoute: FC<SearchRouteProps> = (props) => {
         }
     };
 
-    return <>
-        <Text>
-            <Text bold>🚌 請輸入要查詢的公車路線：</Text>
-            <TextInput value={query} onChange={handleChangeQuery} onSubmit={() => { }} />
-        </Text>
-        {
-            query != '' &&
-            <SelectInput
-                items={routeItems}
-                onHighlight={handleHighlight}
-                onSelect={handleSelect}
-                limit={props.height - 1}
-            />
-        }
-    </>;
+    return (
+        <>
+            <Text>
+                <Text bold>🚌 請輸入要查詢的公車路線：</Text>
+                <TextInput value={query} onChange={handleChangeQuery} onSubmit={() => { }} />
+            </Text>
+            {
+                query != '' &&
+                <SelectInput
+                    items={routeItems}
+                    onHighlight={handleHighlight}
+                    onSelect={handleSelect}
+                    limit={props.height - 1}
+                />
+            }
+        </>
+    );
 };

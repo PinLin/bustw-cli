@@ -37,25 +37,27 @@ export const ShowStopsOfRoute: FC<ShowStopsOfRouteProps> = (props) => {
     });
 
     if (busRoute) {
-        return <>
-            <Divider width={props.width * 0.97} title={`[${getCityChineseName(busRoute.city)}] ${busRoute.nameZhTw}`} />
-            <Tabs onChange={(name) => {
-                setSubRouteTabIndex(Number(name));
-                setFirstStopItemIndex(0);
-            }} children={busRoute.subRoutes.map((subRoute, index) => {
-                const stops = JSON.parse(subRoute.stopsJson) as BusStop[];
-                return <Tab name={index.toString()}>{`往${stops[stops.length - 1].nameZhTw}`}</Tab>
-            })} />
-            <Divider width={props.width * 0.97} title={''} />
-            {
-                JSON.parse(busRoute.subRoutes[subRouteTabIndex].stopsJson).map((stop) => {
-                    return <Text>
-                        <Text color="gray">［ 載入中 ］</Text>
-                        <Text>{stop.nameZhTw}</Text>
-                    </Text>
-                }).slice(firstStopItemIndex, firstStopItemIndex + (props.height - 3))
-            }
-        </>;
+        return (
+            <>
+                <Divider width={props.width * 0.97} title={`[${getCityChineseName(busRoute.city)}] ${busRoute.nameZhTw}`} />
+                <Tabs onChange={(name) => {
+                    setSubRouteTabIndex(Number(name));
+                    setFirstStopItemIndex(0);
+                }} children={busRoute.subRoutes.map((subRoute, index) => {
+                    const stops = JSON.parse(subRoute.stopsJson) as BusStop[];
+                    return <Tab name={index.toString()}>{`往${stops[stops.length - 1].nameZhTw}`}</Tab>
+                })} />
+                <Divider width={props.width * 0.97} title={''} />
+                {
+                    JSON.parse(busRoute.subRoutes[subRouteTabIndex].stopsJson).map((stop) => {
+                        return <Text>
+                            <Text color="gray">［ 載入中 ］</Text>
+                            <Text>{stop.nameZhTw}</Text>
+                        </Text>
+                    }).slice(firstStopItemIndex, firstStopItemIndex + (props.height - 3))
+                }
+            </>
+        );
     } else {
         (async () => {
             setBusRoute(await getRepository(BusRoute).findOne(props.routeId, {
@@ -63,11 +65,13 @@ export const ShowStopsOfRoute: FC<ShowStopsOfRouteProps> = (props) => {
             }));
         })()
 
-        return <Text>
-            <Text color="green">
-                <Spinner type="dots" />
+        return (
+            <Text>
+                <Text color="green">
+                    <Spinner type="dots" />
+                </Text>
+                {" Loading..."}
             </Text>
-            {" Loading..."}
-        </Text>
+        );
     }
 }
