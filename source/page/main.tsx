@@ -2,8 +2,10 @@ import React, { FC, useState } from 'react';
 import Divider from 'ink-divider';
 import { Tab, Tabs } from 'ink-tab';
 import { SearchRoute } from './search-route';
+import { Setting } from './setting';
 
 export interface MainProps {
+    onGoToSelectAvailableCities?: () => void;
     onSelect?: ((city: string, routeId: string) => void);
     availableCities: string[];
     width: number;
@@ -26,6 +28,10 @@ export const Main: FC<MainProps> = (props) => {
                 <SearchRoute height={props.height - 3} availableCities={props.availableCities}
                     onSelect={props.onSelect}
                 />
+            }
+            {
+                selectedTabName == 'Setting' &&
+                <Setting onGoToSelectAvailableCities={props.onGoToSelectAvailableCities} />
             }
         </>
     );

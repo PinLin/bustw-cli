@@ -45,6 +45,9 @@ const App: FC<{ name?: string }> = ({ name = 'Stranger' }) => {
                         setTargetRouteId(routeId);
                         setAppState(AppState.ShowStopsOfRoute);
                     }}
+                    onGoToSelectAvailableCities={() => {
+                        setAppState(AppState.SelectAvailableCities);
+                    }}
                 />
             );
         }
