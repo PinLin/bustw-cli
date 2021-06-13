@@ -36,15 +36,18 @@ export const ShowStopsOfRoute: FC<ShowStopsOfRouteProps> = (props) => {
     return (
         <>
             <Divider width={props.width * 0.97} title={`[${getCityChineseName(props.route.city)}] ${props.route.nameZhTw}`} />
-            <Tabs onChange={(name) => {
-                setSubRouteTabIndex(Number(name));
-                setFirstStopItemIndex(0);
-            }} children={props.route.subRoutes.map((subRoute, index) => {
-                const stops = JSON.parse(subRoute.stopsJson) as BusStop[];
-                return (
-                    <Tab name={index.toString()}>{`往${stops[stops.length - 1].nameZhTw}`}</Tab>
-                );
-            })} />
+            <Tabs
+                onChange={(name) => {
+                    setSubRouteTabIndex(Number(name));
+                    setFirstStopItemIndex(0);
+                }}
+                children={props.route.subRoutes.map((subRoute, index) => {
+                    const stops = JSON.parse(subRoute.stopsJson) as BusStop[];
+                    return (
+                        <Tab name={index.toString()}>{`往${stops[stops.length - 1].nameZhTw}`}</Tab>
+                    );
+                })}
+            />
             <Divider width={props.width * 0.97} title={''} />
             {
                 nowStops.map((stop) => {

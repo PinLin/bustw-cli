@@ -39,11 +39,13 @@ const App: FC<{ name?: string }> = ({ name = 'Stranger' }) => {
         } else {
             page = (
                 <Main width={width < maxWidth ? width : maxWidth} height={height}
-                    availableCities={availableCities} onSelect={(city, routeId) => {
+                    availableCities={availableCities}
+                    onSelect={(city, routeId) => {
                         setTargetCity(city);
                         setTargetRouteId(routeId);
                         setAppState(AppState.ShowStopsOfRoute);
-                    }} />
+                    }}
+                />
             );
         }
     }
@@ -57,21 +59,26 @@ const App: FC<{ name?: string }> = ({ name = 'Stranger' }) => {
         } else {
             page = (
                 <ShowStopsOfRoute width={width < maxWidth ? width : maxWidth} height={height}
-                    route={targetRoute} onExit={() => {
+                    route={targetRoute}
+                    onExit={() => {
                         setAppState(AppState.Main);
                         setTargetRoute(null);
-                    }} />
+                    }}
+                />
             );
         }
     }
     if (appState == AppState.SelectAvailableCities) {
         page = (
-            <SelectAvailableCities previousSelectedCities={availableCities} onSelect={(selectedCities) => {
-                setAvailableCities(selectedCities);
-                setAppState(AppState.Main);
-            }} onExit={() => {
-                setAppState(AppState.Main);
-            }} />
+            <SelectAvailableCities previousSelectedCities={availableCities}
+                onSelect={(selectedCities) => {
+                    setAvailableCities(selectedCities);
+                    setAppState(AppState.Main);
+                }}
+                onExit={() => {
+                    setAppState(AppState.Main);
+                }}
+            />
         );
     }
 

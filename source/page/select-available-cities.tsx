@@ -125,7 +125,9 @@ export const SelectAvailableCities: FC<SelectAvailableCitiesProps> = (props) => 
                     <Text bold> 🏙  請選擇要檢索的城市</Text>
                     <Text color="gray">（按空白鍵選擇，按 Enter 送出）</Text>
                 </Text>
-                <MultiSelect items={items} defaultSelected={selectedItems} onSubmit={handleSubmit} limit={height - 1} />
+                <MultiSelect limit={height - 1} items={items} defaultSelected={selectedItems}
+                    onSubmit={handleSubmit}
+                />
             </>
         );
     }

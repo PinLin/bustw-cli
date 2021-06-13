@@ -16,9 +16,7 @@ export const Main: FC<MainProps> = (props) => {
     return (
         <>
             <Divider width={props.width * 0.97} title={"Bus tracker for Taiwan 🇹🇼"} />
-            <Tabs onChange={(name) => {
-                setSelectedTabName(name);
-            }}>
+            <Tabs onChange={(name) => { setSelectedTabName(name); }}>
                 <Tab name={'SearchRoute'}>{"路線搜尋"}</Tab>
                 <Tab name={'Setting'}>{"設定"}</Tab>
             </Tabs>
