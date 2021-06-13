@@ -36,8 +36,11 @@ export const SearchRoute: FC<SearchRouteProps> = (props) => {
         setQuery(routeItem?.value.nameZhTw ?? '');
     };
     const handleSelect = (routeItem: { label: string, value: BusRoute }) => {
-        if (props.onSelected) {
-            props.onSelected(routeItem.value.city, routeItem.value.id);
+        try {
+            if (props.onSelected) {
+                props.onSelected(routeItem.value.city, routeItem.value.id);
+            }
+        } catch (e) {
         }
     };
 
