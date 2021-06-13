@@ -6,9 +6,10 @@ import { BusInfo } from './entity/bus-info';
 import { SelectAvailableCities } from './page/select-available-cities';
 import { SearchRoute } from './page/search-route';
 import { ShowStopsOfRoute } from './page/show-stops-of-route';
+import { Loading } from './page/loading';
+import { BusRoute } from './entity/bus-route';
 
 enum AppState {
-    None,
     SelectAvailableCities,
     SearchRoute,
     ShowStopsOfRoute,
@@ -16,48 +17,59 @@ enum AppState {
 
 const App: FC<{ name?: string }> = ({ name = 'Stranger' }) => {
     const [width, height] = useStdoutDimensions();
-    const [appState, setAppState] = useState(AppState.None);
+    const [appState, setAppState] = useState(AppState.SearchRoute);
     const [availableCities, setAvailableCities] = useState([] as string[]);
     const [targetCity, setTargetCity] = useState('');
     const [targetRouteId, setTargetRouteId] = useState('');
+    const [targetRoute, setTargetRoute] = useState(null as BusRoute);
 
     const maxWidth = 60;
 
-    let page = <Text />
-    if (appState == AppState.None) {
-        (async () => {
-            setAvailableCities((await getRepository(BusInfo).find()).map(busInfo => busInfo.city));
-            if (availableCities.length > 0) {
-                setAppState(AppState.SearchRoute);
-            } else {
-                setAppState(AppState.SelectAvailableCities);
-            }
-        })()
-    }
+    let page = (<Loading />);
     if (appState == AppState.SelectAvailableCities) {
         page = (
-            <SelectAvailableCities previousSelectedCities={availableCities} onSelected={(selectedCities) => {
+            <SelectAvailableCities previousSelectedCities={availableCities} onSelect={(selectedCities) => {
                 setAvailableCities(selectedCities);
                 setAppState(AppState.SearchRoute);
             }} />
         );
     }
     if (appState == AppState.SearchRoute) {
-        page = (
-            <SearchRoute height={height} availableCities={availableCities} onSelected={(city, routeId) => {
-                setTargetCity(city);
-                setTargetRouteId(routeId);
-                setAppState(AppState.ShowStopsOfRoute);
-            }} />
-        );
+        if (availableCities.length == 0) {
+            (async () => {
+                const cities = (await getRepository(BusInfo).find()).map(busInfo => busInfo.city); 
+                if (cities.length == 0) {
+                    setAppState(AppState.SelectAvailableCities);
+                } else {
+                    setAvailableCities(cities);
+                }
+            })()
+        } else {
+            page = (
+                <SearchRoute height={height} availableCities={availableCities} onSelect={(city, routeId) => {
+                    setTargetCity(city);
+                    setTargetRouteId(routeId);
+                    setAppState(AppState.ShowStopsOfRoute);
+                }} />
+            );
+        }
     }
     if (appState == AppState.ShowStopsOfRoute) {
-        page = (
-            <ShowStopsOfRoute width={width < maxWidth ? width : maxWidth} height={height}
-                city={targetCity} routeId={targetRouteId} onExit={() => {
-                    setAppState(AppState.SearchRoute);
-                }} />
-        );
+        if (!targetRoute) {
+            (async () => {
+                setTargetRoute(await getRepository(BusRoute).findOne(targetRouteId, {
+                    relations: ['subRoutes'],
+                }));
+            })()
+        } else {
+            page = (
+                <ShowStopsOfRoute width={width < maxWidth ? width : maxWidth} height={height}
+                    route={targetRoute} onExit={() => {
+                        setAppState(AppState.SearchRoute);
+                        setTargetRoute(null);
+                    }} />
+            );
+        }
     }
 
     return (

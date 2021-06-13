@@ -12,7 +12,7 @@ import { BusRoute } from '../entity/bus-route';
 import { BusSubRoute } from '../entity/bus-sub-route';
 
 export interface SelectAvailableCitiesProps {
-    onSelected?: ((selectedCities: string[]) => void);
+    onSelect?: (selectedCities: string[]) => void;
     previousSelectedCities: string[];
 }
 
@@ -70,8 +70,8 @@ export const SelectAvailableCities: FC<SelectAvailableCitiesProps> = (props) => 
             setCitiesState(city, CityState.None);
         }));
 
-        if (props.onSelected) {
-            props.onSelected(selectedCities);
+        if (props.onSelect) {
+            props.onSelect(selectedCities);
         }
     };
 

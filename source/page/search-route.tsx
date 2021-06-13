@@ -7,7 +7,7 @@ import { BusRoute } from '../entity/bus-route';
 import { getCityChineseName } from '../util/city';
 
 export interface SearchRouteProps {
-    onSelected?: ((city: string, routeId: string) => void);
+    onSelect?: ((city: string, routeId: string) => void);
     availableCities: string[];
     height: number;
 }
@@ -36,8 +36,8 @@ export const SearchRoute: FC<SearchRouteProps> = (props) => {
     };
     const handleSelect = (routeItem: { label: string, value: BusRoute }) => {
         try {
-            if (props.onSelected) {
-                props.onSelected(routeItem.value.city, routeItem.value.id);
+            if (props.onSelect) {
+                props.onSelect(routeItem.value.city, routeItem.value.id);
             }
         } catch (e) {
         }
