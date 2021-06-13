@@ -10,9 +10,7 @@ export class GetBusRoutesDto {
     city?: string;
     subRoutes: {
       id: string;
-      direction: number
-      nameZhTw?: string;
-      nameEn?: string;
+      direction: number;
       stops: {
         id: string;
         sequence: number;

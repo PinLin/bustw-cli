@@ -11,12 +11,6 @@ export class BusSubRoute {
   direction: number
 
   @Column()
-  nameZhTw?: string;
-
-  @Column()
-  nameEn?: string;
-
-  @Column()
   stopsJson: string;
 
   @ManyToOne(_ => BusRoute, { onDelete: 'CASCADE' })
