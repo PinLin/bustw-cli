@@ -1,12 +1,12 @@
 import React, { FC, useState } from 'react';
 import { Text, useInput } from 'ink';
-import Spinner from 'ink-spinner';
 import { Tab, Tabs } from 'ink-tab';
 import Divider from 'ink-divider';
 import { getRepository } from 'typeorm';
 import { BusRoute } from '../entity/bus-route';
 import { BusStop } from '../entity/bus-stop';
 import { getCityChineseName } from '../util/city';
+import { Loading } from './loading';
 
 export interface ShowStopsOfRouteProps {
     onExit: () => void;
@@ -66,12 +66,7 @@ export const ShowStopsOfRoute: FC<ShowStopsOfRouteProps> = (props) => {
         })()
 
         return (
-            <Text>
-                <Text color="green">
-                    <Spinner type="dots" />
-                </Text>
-                {" Loading..."}
-            </Text>
+            <Loading />
         );
     }
 }
