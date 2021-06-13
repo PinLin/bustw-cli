@@ -10,10 +10,10 @@ import { getCityChineseName } from '../util/city';
 export interface SearchRouteProps {
     onSelected?: ((city: string, routeId: string) => void);
     availableCities: string[];
+    height: number;
 }
 
 export const SearchRoute: FC<SearchRouteProps> = (props) => {
-    const [, height] = useStdoutDimensions();
     const [query, setQuery] = useState('');
     const [routeItems, setRouteItems] = useState([] as { key: string, label: string, value: BusRoute }[]);
 
@@ -55,7 +55,7 @@ export const SearchRoute: FC<SearchRouteProps> = (props) => {
                 items={routeItems}
                 onHighlight={handleHighlight}
                 onSelect={handleSelect}
-                limit={height - 1}
+                limit={props.height - 1}
             />
         }
     </>;

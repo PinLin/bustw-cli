@@ -21,6 +21,8 @@ const App: FC<{ name?: string }> = ({ name = 'Stranger' }) => {
     const [targetCity, setTargetCity] = useState('');
     const [targetRouteId, setTargetRouteId] = useState('');
 
+    const maxWidth = 60;
+
     let page = <Text />
     if (appState == AppState.None) {
         (async () => {
@@ -39,20 +41,20 @@ const App: FC<{ name?: string }> = ({ name = 'Stranger' }) => {
         }} />
     }
     if (appState == AppState.SearchRoute) {
-        page = <SearchRoute availableCities={availableCities} onSelected={(city, routeId) => {
+        page = <SearchRoute height={height} availableCities={availableCities} onSelected={(city, routeId) => {
             setTargetCity(city);
             setTargetRouteId(routeId);
             setAppState(AppState.ShowStopsOfRoute);
         }} />
     }
     if (appState == AppState.ShowStopsOfRoute) {
-        page = <ShowStopsOfRoute city={targetCity} routeId={targetRouteId}
-            onExit={() => {
+        page = <ShowStopsOfRoute width={width < maxWidth ? width : maxWidth} height={height}
+            city={targetCity} routeId={targetRouteId} onExit={() => {
                 setAppState(AppState.SearchRoute);
             }} />
     }
 
-    return <Box width={width} height={height} flexDirection="column">
+    return <Box width={width < maxWidth ? width : maxWidth} height={height} flexDirection="column">
         {page}
     </Box>
 };
