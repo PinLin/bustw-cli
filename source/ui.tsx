@@ -8,6 +8,8 @@ import { ShowStopsOfRoute } from './page/show-stops-of-route';
 import { Loading } from './page/loading';
 import { BusRoute } from './entity/bus-route';
 import { Main } from './page/main';
+import { getBusStopsByRouteName } from './service/api-service';
+import { BusStopDetail } from './entity/bus-stop-detail';
 
 enum AppState {
     Main,
@@ -20,8 +22,10 @@ const App: FC<{ name?: string }> = ({ name = 'Stranger' }) => {
     const [appState, setAppState] = useState(AppState.Main);
     const [availableCities, setAvailableCities] = useState([] as string[]);
     const [targetCity, setTargetCity] = useState('');
+    const [targetRouteName, setTargetRouteName] = useState('');
     const [targetRouteId, setTargetRouteId] = useState('');
     const [targetRoute, setTargetRoute] = useState(null as BusRoute);
+    const [targetStopDetails, setTargetStopDetails] = useState(null as BusStopDetail[])
 
     const maxWidth = appState == AppState.ShowStopsOfRoute ? 80 : 160;
 
@@ -40,8 +44,9 @@ const App: FC<{ name?: string }> = ({ name = 'Stranger' }) => {
             page = (
                 <Main width={width < maxWidth ? width : maxWidth} height={height}
                     availableCities={availableCities}
-                    onSelect={(city, routeId) => {
+                    onSelect={(city, routeName, routeId) => {
                         setTargetCity(city);
+                        setTargetRouteName(routeName);
                         setTargetRouteId(routeId);
                         setAppState(AppState.ShowStopsOfRoute);
                     }}
@@ -58,11 +63,12 @@ const App: FC<{ name?: string }> = ({ name = 'Stranger' }) => {
                 setTargetRoute(await getRepository(BusRoute).findOne(targetRouteId, {
                     relations: ['subRoutes'],
                 }));
+                setTargetStopDetails((await getBusStopsByRouteName(targetCity, targetRouteName)).stops);
             })()
         } else {
             page = (
                 <ShowStopsOfRoute width={width < maxWidth ? width : maxWidth} height={height}
-                    route={targetRoute}
+                    route={targetRoute} stopDetails={targetStopDetails}
                     onExit={() => {
                         setAppState(AppState.Main);
                         setTargetRoute(null);

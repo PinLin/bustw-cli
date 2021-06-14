@@ -7,7 +7,7 @@ import { Setting } from './setting';
 
 export interface MainProps {
     onGoToSelectAvailableCities?: () => void;
-    onSelect?: ((city: string, routeId: string) => void);
+    onSelect?: ((city: string, routeName: string, routeId: string) => void);
     availableCities: string[];
     width: number;
     height: number;

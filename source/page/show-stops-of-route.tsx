@@ -5,10 +5,12 @@ import Divider from 'ink-divider';
 import { BusRoute } from '../entity/bus-route';
 import { BusStop } from '../entity/bus-stop';
 import { getCityChineseName } from '../util/city';
+import { BusStopDetail } from '../entity/bus-stop-detail';
 
 export interface ShowStopsOfRouteProps {
     onExit?: () => void;
     route: BusRoute;
+    stopDetails: BusStopDetail[];
     width: number;
     height: number;
 }
