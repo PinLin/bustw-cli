@@ -42,8 +42,8 @@ export const ShowStopsOfRoute: FC<ShowStopsOfRouteProps> = (props) => {
     });
 
     const stopItems = Object.entries(stopsMap).sort(([sequenceA,], [sequenceB,]) => (Number(sequenceA) - Number(sequenceB)))
-        .map(([_, stops]) => (
-            <Text>
+        .map(([sequence, stops]) => (
+            <Text key={sequence}>
                 <Text color="gray">［ 載入中 ］</Text>
                 <Text>{stops[0].nameZhTw}</Text>
             </Text>
