@@ -1,5 +1,5 @@
 export class BusStop {
-  id: number;
+  id: string;
 
   sequence: number;
 
