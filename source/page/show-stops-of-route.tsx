@@ -43,9 +43,15 @@ export const ShowStopsOfRoute: FC<ShowStopsOfRouteProps> = (props) => {
                 }}
                 children={props.route.subRoutes.map((subRoute, index) => {
                     const stops = JSON.parse(subRoute.stopsJson) as BusStop[];
-                    return (
-                        <Tab name={index.toString()}>{`往${stops[stops.length - 1].nameZhTw}`}</Tab>
-                    );
+                    if (index == 1) {
+                        return (
+                            <Tab name={index.toString()}>{`往${props.route.departureStopNameZhTw || stops[stops.length - 1].nameZhTw}`}</Tab>
+                        );
+                    } else {
+                        return (
+                            <Tab name={index.toString()}>{`往${props.route.destinationStopNameZhTw || stops[stops.length - 1].nameZhTw}`}</Tab>
+                        );
+                    }
                 })}
             />
             <Divider width={props.width * 0.97} title={''} />
