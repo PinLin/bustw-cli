@@ -43,7 +43,7 @@ export const ShowStopsOfRoute: FC<ShowStopsOfRouteProps> = (props) => {
                 }}
                 children={props.route.subRoutes.map((subRoute, index) => {
                     const stops = JSON.parse(subRoute.stopsJson) as BusStop[];
-                    if (index == 1) {
+                    if (subRoute.direction == 1) {
                         return (
                             <Tab name={index.toString()}>{`往${props.route.departureStopNameZhTw || stops[stops.length - 1].nameZhTw}`}</Tab>
                         );
