@@ -42,9 +42,6 @@ export const SearchRoute: FC<SearchRouteProps> = (props) => {
             }
         }));
     };
-    const handleHighlight = (routeItem: { label: string, value: BusRoute }) => {
-        setQuery(routeItem?.value.nameZhTw ?? '');
-    };
     const handleSelect = (routeItem: { label: string, value: BusRoute }) => {
         try {
             if (props.onSelect) {
@@ -64,7 +61,6 @@ export const SearchRoute: FC<SearchRouteProps> = (props) => {
                 query != '' &&
                 <SelectInput
                     items={routeItems}
-                    onHighlight={handleHighlight}
                     onSelect={handleSelect}
                     limit={props.height - 3}
                 />
