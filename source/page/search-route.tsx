@@ -66,7 +66,7 @@ export const SearchRoute: FC<SearchRouteProps> = (props) => {
                     items={routeItems}
                     onHighlight={handleHighlight}
                     onSelect={handleSelect}
-                    limit={props.height - 1}
+                    limit={props.height - 3}
                 />
             }
         </>

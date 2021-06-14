@@ -20,7 +20,7 @@ export const ShowStopsOfRoute: FC<ShowStopsOfRouteProps> = (props) => {
     const nowStops = JSON.parse(props.route.subRoutes[subRouteTabIndex].stopsJson) as BusStop[];
 
     useInput((input, key) => {
-        if (key.downArrow && firstStopItemIndex + (props.height - 3) < nowStops.length) {
+        if (key.downArrow && firstStopItemIndex + (props.height - 5) < nowStops.length) {
             setFirstStopItemIndex(firstStopItemIndex + 1);
         }
         if (key.upArrow && firstStopItemIndex > 0) {
@@ -63,7 +63,7 @@ export const ShowStopsOfRoute: FC<ShowStopsOfRouteProps> = (props) => {
                             <Text>{stop.nameZhTw}</Text>
                         </Text>
                     );
-                }).slice(firstStopItemIndex, firstStopItemIndex + (props.height - 3))
+                }).slice(firstStopItemIndex, firstStopItemIndex + (props.height - 5))
             }
         </>
     );

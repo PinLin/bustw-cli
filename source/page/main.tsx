@@ -18,7 +18,7 @@ export const Main: FC<MainProps> = (props) => {
 
     return (
         <>
-            <Divider width={props.width * 0.97} title={"Bus tracker for Taiwan 🇹🇼"} />
+            <Divider width={props.width * 0.98} title={"Bus tracker for Taiwan 🇹🇼"} />
             <Tabs keyMap={{ previous: [], next: [] }}
                 onChange={(name) => { setSelectedTabName(name); }}
             >
