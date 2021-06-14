@@ -25,11 +25,22 @@ export const SearchRoute: FC<SearchRouteProps> = (props) => {
         });
 
         setQuery(label);
-        setRouteItems(foundRoutes.map(route => ({
-            key: route.id,
-            label: `[${getCityChineseName(route.city)}] ${route.nameZhTw}`,
-            value: route,
-        })));
+        setRouteItems(foundRoutes.map(route => {
+            if (route.nameZhTw.match(/-[^0-9主副區]+/) ||
+                ['→', '往'].map(c => route.nameZhTw.includes(c)).includes(true)) {
+                return {
+                    key: route.id,
+                    label: `[${getCityChineseName(route.city)}] ${route.nameZhTw}`,
+                    value: route,
+                };
+            } else {
+                return {
+                    key: route.id,
+                    label: `[${getCityChineseName(route.city)}] ${route.nameZhTw} ${route.departureStopNameZhTw} -> ${route.destinationStopNameZhTw}`,
+                    value: route,
+                };
+            }
+        }));
     };
     const handleHighlight = (routeItem: { label: string, value: BusRoute }) => {
         setQuery(routeItem?.value.nameZhTw ?? '');
