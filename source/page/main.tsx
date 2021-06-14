@@ -1,4 +1,5 @@
 import React, { FC, useState } from 'react';
+import { Text } from 'ink';
 import Divider from 'ink-divider';
 import { Tab, Tabs } from 'ink-tab';
 import { SearchRoute } from './search-route';
@@ -18,9 +19,16 @@ export const Main: FC<MainProps> = (props) => {
     return (
         <>
             <Divider width={props.width * 0.97} title={"Bus tracker for Taiwan 🇹🇼"} />
-            <Tabs onChange={(name) => { setSelectedTabName(name); }}>
-                <Tab name={'SearchRoute'}>{"路線搜尋"}</Tab>
-                <Tab name={'Setting'}>{"設定"}</Tab>
+            <Tabs keyMap={{ previous: [], next: [] }}
+                onChange={(name) => { setSelectedTabName(name); }}
+            >
+                <Tab name={'SearchRoute'}>路線搜尋</Tab>
+                <Tab name={'Setting'}>
+                    <Text>
+                        <Text>設定</Text>
+                        <Text color="gray">（按 Tab 切換）</Text>
+                    </Text>
+                </Tab>
             </Tabs>
             <Divider width={props.width * 0.97} title={''} />
             {
