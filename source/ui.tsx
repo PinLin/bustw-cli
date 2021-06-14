@@ -92,9 +92,9 @@ const App: FC<{ name?: string }> = ({ name = 'Stranger' }) => {
     }
 
     return (
-        <Box width={width < maxWidth ? width : maxWidth} height={height} flexDirection="column">
+        <>
             {page}
-        </Box>
+        </>
     );
 };
 
