@@ -17,10 +17,16 @@ export const ShowStopsOfRoute: FC<ShowStopsOfRouteProps> = (props) => {
     const [subRouteTabIndex, setSubRouteTabIndex] = useState(0);
     const [firstStopItemIndex, setFirstStopItemIndex] = useState(0);
 
-    const nowStops = JSON.parse(props.route.subRoutes[subRouteTabIndex].stopsJson) as BusStop[];
+    const stopsMap = {} as { [sequence: number]: BusStop[] };
+    JSON.parse(props.route.subRoutes[subRouteTabIndex].stopsJson).map((stop: BusStop) => {
+        if (!stopsMap[stop.sequence]) {
+            stopsMap[stop.sequence] = [];
+        }
+        stopsMap[stop.sequence].push(stop);
+    });
 
     useInput((input, key) => {
-        if (key.downArrow && firstStopItemIndex + (props.height - 5) < nowStops.length) {
+        if (key.downArrow && firstStopItemIndex + (props.height - 5) < Object.keys(stopsMap).length) {
             setFirstStopItemIndex(firstStopItemIndex + 1);
         }
         if (key.upArrow && firstStopItemIndex > 0) {
@@ -32,6 +38,14 @@ export const ShowStopsOfRoute: FC<ShowStopsOfRouteProps> = (props) => {
             }
         }
     });
+
+    const stopItems = Object.entries(stopsMap).sort(([sequenceA,], [sequenceB,]) => (Number(sequenceA) - Number(sequenceB)))
+        .map(([_, stops]) => (
+            <Text>
+                <Text color="gray">［ 載入中 ］</Text>
+                <Text>{stops[0].nameZhTw}</Text>
+            </Text>
+        )).slice(firstStopItemIndex, firstStopItemIndex + (props.height - 5));
 
     return (
         <>
@@ -55,16 +69,7 @@ export const ShowStopsOfRoute: FC<ShowStopsOfRouteProps> = (props) => {
                 })}
             />
             <Divider width={props.width * 0.97} title={''} />
-            {
-                nowStops.map((stop) => {
-                    return (
-                        <Text>
-                            <Text color="gray">［ 載入中 ］</Text>
-                            <Text>{stop.nameZhTw}</Text>
-                        </Text>
-                    );
-                }).slice(firstStopItemIndex, firstStopItemIndex + (props.height - 5))
-            }
+            {stopItems}
         </>
     );
 }
