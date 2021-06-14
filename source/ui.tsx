@@ -23,7 +23,7 @@ const App: FC<{ name?: string }> = ({ name = 'Stranger' }) => {
     const [targetRouteId, setTargetRouteId] = useState('');
     const [targetRoute, setTargetRoute] = useState(null as BusRoute);
 
-    const maxWidth = 80;
+    const maxWidth = appState == AppState.ShowStopsOfRoute ? 80 : 160;
 
     let page = (<Loading />);
     if (appState == AppState.Main) {
