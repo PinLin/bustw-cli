@@ -10,6 +10,12 @@ export class BusSubRoute {
   @PrimaryColumn()
   direction: number
 
+  @Column({ nullable: true })
+  headsignZhTw: string;
+
+  @Column({ nullable: true })
+  headsignEn: string;
+
   @Column()
   stopsJson: string;
 
