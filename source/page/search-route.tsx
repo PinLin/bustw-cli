@@ -17,20 +17,26 @@ export const SearchRoute: FC<SearchRouteProps> = (props) => {
     const [routeItems, setRouteItems] = useState([] as { key: string, label: string, value: BusRoute }[]);
 
     const handleChangeQuery = async (label: string) => {
-        const foundRoutes = await getRepository(BusRoute).find({
-            where: {
-                nameZhTw: Like(`%${label}%`),
-                city: In(props.availableCities),
-            },
-        });
+        const foundRoutes = await getRepository(BusRoute).createQueryBuilder('route')
+            .andWhere('route.nameZhTw like :name', { name: `%${label}%` })
+            .andWhere('route.city IN (:...cities)', { cities: props.availableCities })
+            .leftJoin('route.subRoutes', 'busSubRoute', 'busSubRoute.routeId = route.id')
+            .addSelect('busSubRoute.headsignZhTw')
+            .getMany();
 
         setQuery(label);
         setRouteItems(foundRoutes.map(route => {
             if (route.nameZhTw.match(/-[^0-9主副區]+/) ||
-                ['→', '往'].map(c => route.nameZhTw.includes(c)).includes(true)) {
+                ['往'].map(c => route.nameZhTw.includes(c)).includes(true)) {
                 return {
                     key: route.id,
                     label: `[${getCityChineseName(route.city)}] ${route.nameZhTw}`,
+                    value: route,
+                };
+            } else if (route?.subRoutes[0]?.headsignZhTw) {
+                return {
+                    key: route.id,
+                    label: `[${getCityChineseName(route.city)}] ${route.nameZhTw} ${route.subRoutes[0].headsignZhTw}`,
                     value: route,
                 };
             } else {
