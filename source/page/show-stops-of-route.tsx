@@ -34,7 +34,7 @@ export const ShowStopsOfRoute: FC<ShowStopsOfRouteProps> = (props) => {
         if (key.upArrow && firstStopItemIndex > 0) {
             setFirstStopItemIndex(firstStopItemIndex - 1);
         }
-        if (key.escape || input == 'q') {
+        if (key.escape || input == 'q' || input == 'Q') {
             if (props.onExit) {
                 props.onExit();
             }
