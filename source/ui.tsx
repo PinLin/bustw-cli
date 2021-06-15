@@ -59,12 +59,10 @@ const App: FC<{ name?: string }> = ({ name = 'Stranger' }) => {
     }
     if (appState == AppState.ShowStopsOfRoute) {
         if (!targetRoute) {
-            (async () => {
-                setTargetRoute(await getRepository(BusRoute).findOne(targetRouteId, {
+            getRepository(BusRoute).findOne(targetRouteId, {
                     relations: ['subRoutes'],
-                }));
-                setTargetStopDetails((await getBusStopsByRouteName(targetCity, targetRouteName)).stops);
-            })()
+            }).then(route => setTargetRoute(route));
+            getBusStopsByRouteName(targetCity, targetRouteName).then(data => setTargetStopDetails(data.stops));
         } else {
             page = (
                 <ShowStopsOfRoute width={width < maxWidth ? width : maxWidth} height={height}
