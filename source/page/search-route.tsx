@@ -5,10 +5,12 @@ import SelectInput from 'ink-select-input';
 import { getRepository, In, Like } from 'typeorm';
 import { BusRoute } from '../entity/bus-route';
 import { getCityChineseName } from '../util/city';
+import { truncateMiddle } from '../util/truncate';
 
 export interface SearchRouteProps {
     onSelect?: ((city: string, routeName: string, routeId: string) => void);
     availableCities: string[];
+    width: number;
     height: number;
 }
 
@@ -34,9 +36,11 @@ export const SearchRoute: FC<SearchRouteProps> = (props) => {
                     value: route,
                 };
             } else if (route?.subRoutes[0]?.headsignZhTw) {
+                const headsign = truncateMiddle(route.subRoutes[0].headsignZhTw,
+                    props.width - 14 - route.nameZhTw.length - route.subRoutes[0].headsignZhTw.length);
                 return {
                     key: route.id,
-                    label: `[${getCityChineseName(route.city)}] ${route.nameZhTw} ${route.subRoutes[0].headsignZhTw}`,
+                    label: `[${getCityChineseName(route.city)}] ${route.nameZhTw} ${headsign}`,
                     value: route,
                 };
             } else {

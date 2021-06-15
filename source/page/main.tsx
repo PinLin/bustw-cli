@@ -33,8 +33,8 @@ export const Main: FC<MainProps> = (props) => {
             <Divider width={props.width * 0.97} title={''} />
             {
                 selectedTabName == 'SearchRoute' &&
-                <SearchRoute height={props.height - 3} availableCities={props.availableCities}
-                    onSelect={props.onSelect}
+                <SearchRoute width={props.width} height={props.height - 3}
+                    availableCities={props.availableCities} onSelect={props.onSelect}
                 />
             }
             {
