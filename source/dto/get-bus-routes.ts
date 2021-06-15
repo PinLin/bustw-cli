@@ -1,6 +1,7 @@
 export class GetBusRoutesDto {
   routes: {
     id: string;
+    ptxName?: string;
     nameZhTw?: string;
     nameEn?: string;
     departureStopNameZhTw?: string;

@@ -7,6 +7,9 @@ export class BusRoute {
   id: string;
 
   @Column()
+  ptxName?: string;
+
+  @Column()
   nameZhTw?: string;
 
   @Column()

@@ -51,7 +51,7 @@ export const SearchRoute: FC<SearchRouteProps> = (props) => {
     const handleSelect = (routeItem: { label: string, value: BusRoute }) => {
         try {
             if (props.onSelect) {
-                props.onSelect(routeItem.value.city, routeItem.value.nameZhTw, routeItem.value.id);
+                props.onSelect(routeItem.value.city, routeItem.value.ptxName, routeItem.value.id);
             }
         } catch (e) {
         }
