@@ -51,9 +51,9 @@ export const ShowStopsOfRoute: FC<ShowStopsOfRouteProps> = (props) => {
                 if (estimateTimes.length == 0) {
                     return (
                         <Box width={props.width} key={sequence}>
-                            <Text>{" "}</Text>
+                            <Text>{"  "}</Text>
                             <Text color="black" backgroundColor="white">{"[ 未發車 ]"}</Text>
-                            <Text>{" "}</Text>
+                            <Text>{"  "}</Text>
                             <Text>{stops[0].nameZhTw}</Text>
                         </Box>
                     );
@@ -62,18 +62,18 @@ export const ShowStopsOfRoute: FC<ShowStopsOfRouteProps> = (props) => {
                     if (estimateTimeByMinutes > 2) {
                         return (
                             <Box width={props.width} key={sequence}>
-                                <Text>{" "}</Text>
+                                <Text>{"  "}</Text>
                                 <Text backgroundColor="blue">{`[ ${estimateTimeByMinutes.toString().padStart(3, ' ')} 分 ]`}</Text>
-                                <Text>{" "}</Text>
+                                <Text>{"  "}</Text>
                                 <Text>{stops[0].nameZhTw}</Text>
                             </Box>
                         );
                     } else {
                         return (
                             <Box width={props.width} key={sequence}>
-                                <Text>{" "}</Text>
+                                <Text>{"  "}</Text>
                                 <Text backgroundColor="magenta">{`[ ${estimateTimeByMinutes.toString().padStart(3, ' ')} 分 ]`}</Text>
-                                <Text>{" "}</Text>
+                                <Text>{"  "}</Text>
                                 <Text>{stops[0].nameZhTw}</Text>
                             </Box>
                         );
@@ -83,9 +83,9 @@ export const ShowStopsOfRoute: FC<ShowStopsOfRouteProps> = (props) => {
             if (stopDetails?.map(sd => sd.status).includes(1)) {
                 return (
                     <Box width={props.width} key={sequence}>
-                        <Text>{" "}</Text>
+                        <Text>{"  "}</Text>
                         <Text color="black" backgroundColor="white">{"[ 未發車 ]"}</Text>
-                        <Text>{" "}</Text>
+                        <Text>{"  "}</Text>
                         <Text>{stops[0].nameZhTw}</Text>
                     </Box>
                 );
@@ -93,9 +93,9 @@ export const ShowStopsOfRoute: FC<ShowStopsOfRouteProps> = (props) => {
             if (stopDetails?.map(sd => sd.status).includes(2)) {
                 return (
                     <Box width={props.width} key={sequence}>
-                        <Text>{" "}</Text>
+                        <Text>{"  "}</Text>
                         <Text color="black" backgroundColor="yellow">{"[交管不停]"}</Text>
-                        <Text>{" "}</Text>
+                        <Text>{"  "}</Text>
                         <Text>{stops[0].nameZhTw}</Text>
                     </Box>
                 );
@@ -103,9 +103,9 @@ export const ShowStopsOfRoute: FC<ShowStopsOfRouteProps> = (props) => {
             if (stopDetails?.map(sd => sd.status).includes(3)) {
                 return (
                     <Box width={props.width} key={sequence}>
-                        <Text>{" "}</Text>
+                        <Text>{"  "}</Text>
                         <Text color="black" backgroundColor="white">{"[末班駛離]"}</Text>
-                        <Text>{" "}</Text>
+                        <Text>{"  "}</Text>
                         <Text>{stops[0].nameZhTw}</Text>
                     </Box>
                 );
@@ -113,18 +113,18 @@ export const ShowStopsOfRoute: FC<ShowStopsOfRouteProps> = (props) => {
             if (stopDetails?.map(sd => sd.status).includes(4)) {
                 return (
                     <Box width={props.width} key={sequence}>
-                        <Text>{" "}</Text>
+                        <Text>{"  "}</Text>
                         <Text color="black" backgroundColor="white">{"[今日不開]"}</Text>
-                        <Text>{" "}</Text>
+                        <Text>{"  "}</Text>
                         <Text>{stops[0].nameZhTw}</Text>
                     </Box>
                 );
             }
             return (
                 <Box width={props.width} key={sequence}>
-                    <Text>{" "}</Text>
+                    <Text>{"  "}</Text>
                     <Text color="gray">{"[ 載入中 ]"}</Text>
-                    <Text>{" "}</Text>
+                    <Text>{"  "}</Text>
                     <Text>{stops[0].nameZhTw}</Text>
                 </Box>
             );
