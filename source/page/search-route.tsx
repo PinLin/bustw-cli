@@ -18,7 +18,7 @@ export const SearchRoute: FC<SearchRouteProps> = (props) => {
 
     const handleChangeQuery = async (label: string) => {
         const foundRoutes = await getRepository(BusRoute).createQueryBuilder('route')
-            .andWhere('route.nameZhTw like :name', { name: `%${label}%` })
+            .andWhere('route.nameZhTw like :name', { name: `%${label.trim()}%` })
             .andWhere('route.city IN (:...cities)', { cities: props.availableCities })
             .leftJoin('route.subRoutes', 'busSubRoute', 'busSubRoute.routeId = route.id')
             .addSelect('busSubRoute.headsignZhTw')
@@ -64,7 +64,7 @@ export const SearchRoute: FC<SearchRouteProps> = (props) => {
                 <TextInput value={query} onChange={handleChangeQuery} onSubmit={() => { }} />
             </Text>
             {
-                query != '' &&
+                query.trim() != '' &&
                 <SelectInput
                     items={routeItems}
                     onSelect={handleSelect}
