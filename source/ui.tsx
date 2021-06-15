@@ -24,8 +24,8 @@ const App: FC<{ name?: string }> = ({ name = 'Stranger' }) => {
     const [targetCity, setTargetCity] = useState('');
     const [targetRouteName, setTargetRouteName] = useState('');
     const [targetRouteId, setTargetRouteId] = useState('');
-    const [targetRoute, setTargetRoute] = useState(null as BusRoute);
-    const [targetStopDetails, setTargetStopDetails] = useState(null as BusStopDetail[])
+    const [targetRoute, setTargetRoute] = useState(undefined as BusRoute);
+    const [targetStopDetails, setTargetStopDetails] = useState(undefined as BusStopDetail[])
 
     const maxWidth = appState == AppState.ShowStopsOfRoute ? 80 : 160;
 
@@ -60,7 +60,7 @@ const App: FC<{ name?: string }> = ({ name = 'Stranger' }) => {
     if (appState == AppState.ShowStopsOfRoute) {
         if (!targetRoute) {
             getRepository(BusRoute).findOne(targetRouteId, {
-                    relations: ['subRoutes'],
+                relations: ['subRoutes'],
             }).then(route => setTargetRoute(route));
             getBusStopsByRouteName(targetCity, targetRouteName).then(data => setTargetStopDetails(data.stops));
         } else {
