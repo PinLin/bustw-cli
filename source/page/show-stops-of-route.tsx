@@ -43,9 +43,10 @@ export const ShowStopsOfRoute: FC<ShowStopsOfRouteProps> = (props) => {
 
     const stopItems = Object.entries(stopsMap).sort(([sequenceA,], [sequenceB,]) => (Number(sequenceA) - Number(sequenceB)))
         .map(([sequence, stops]) => {
-            const stopDetails = props.stopDetails?.filter(sd => stops.map(s => s.id).includes(sd.id)) ?? [];
+            const stopDetails = props.stopDetails?.filter(sd => stops.map(s => s.id).includes(sd.id))
+                .filter(sd => sd.subRouteId == props.route.subRoutes[subRouteTabIndex].id);
 
-            if (stopDetails.map(sd => sd.status).includes(0)) {
+            if (stopDetails?.map(sd => sd.status).includes(0)) {
                 const estimateTimes = stopDetails.map(sd => sd.estimateTime).filter(t => t > 0).sort((a, b) => (b - a));
                 if (estimateTimes.length == 0) {
                     return (
@@ -79,7 +80,7 @@ export const ShowStopsOfRoute: FC<ShowStopsOfRouteProps> = (props) => {
                     }
                 }
             }
-            if (stopDetails.map(sd => sd.status).includes(1)) {
+            if (stopDetails?.map(sd => sd.status).includes(1)) {
                 return (
                     <Box width={props.width} key={sequence}>
                         <Text>{" "}</Text>
@@ -89,7 +90,7 @@ export const ShowStopsOfRoute: FC<ShowStopsOfRouteProps> = (props) => {
                     </Box>
                 );
             }
-            if (stopDetails.map(sd => sd.status).includes(2)) {
+            if (stopDetails?.map(sd => sd.status).includes(2)) {
                 return (
                     <Box width={props.width} key={sequence}>
                         <Text>{" "}</Text>
@@ -99,7 +100,7 @@ export const ShowStopsOfRoute: FC<ShowStopsOfRouteProps> = (props) => {
                     </Box>
                 );
             }
-            if (stopDetails.map(sd => sd.status).includes(3)) {
+            if (stopDetails?.map(sd => sd.status).includes(3)) {
                 return (
                     <Box width={props.width} key={sequence}>
                         <Text>{" "}</Text>
@@ -109,7 +110,7 @@ export const ShowStopsOfRoute: FC<ShowStopsOfRouteProps> = (props) => {
                     </Box>
                 );
             }
-            if (stopDetails.map(sd => sd.status).includes(4)) {
+            if (stopDetails?.map(sd => sd.status).includes(4)) {
                 return (
                     <Box width={props.width} key={sequence}>
                         <Text>{" "}</Text>

@@ -1,7 +1,7 @@
 export class GetBusStopsDto {
   stops: {
     id: string;
-    routeId: string;
+    subRouteId: string;
     routeNameZhTw: string;
     status: number;
     estimateTime: number;
