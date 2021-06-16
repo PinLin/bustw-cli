@@ -22,26 +22,26 @@
 		"ink-divider": "^3.0.0",
 		"ink-multi-select": "^2.0.0",
 		"ink-select-input": "^4.2.0",
-		"ink-spinner": "^4.0.1",
+		"ink-spinner": "^4.0.2",
 		"ink-tab": "^4.1.0",
 		"ink-text-input": "^4.0.1",
 		"ink-use-stdout-dimensions": "^1.0.5",
-		"meow": "^8.0.0",
-		"react": "^17.0.1",
-		"sqlite3": "^5.0.0",
-		"typeorm": "^0.2.29"
+		"meow": "^8.1.2",
+		"react": "^17.0.2",
+		"sqlite3": "^5.0.2",
+		"typeorm": "^0.2.34"
 	},
 	"devDependencies": {
 		"@ava/typescript": "^1.1.1",
-		"@types/react": "^16.9.56",
-		"ava": "^3.13.0",
-		"chalk": "^4.1.0",
+		"@types/react": "^16.14.8",
+		"ava": "^3.15.0",
+		"chalk": "^4.1.1",
 		"eslint-config-xo-react": "^0.23.0",
-		"eslint-plugin-react": "^7.21.5",
+		"eslint-plugin-react": "^7.24.0",
 		"eslint-plugin-react-hooks": "^4.2.0",
 		"ink-testing-library": "^2.1.0",
-		"typescript": "^4.0.5",
-		"xo": "^0.40.1"
+		"typescript": "^4.3.2",
+		"xo": "^0.40.2"
 	},
 	"ava": {
 		"typescript": {
