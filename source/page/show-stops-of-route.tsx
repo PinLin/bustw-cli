@@ -1,11 +1,12 @@
 import React, { FC, useState } from 'react';
-import { Box, Spacer, Text, useInput } from 'ink';
+import { useInput } from 'ink';
 import { Tab, Tabs } from 'ink-tab';
 import Divider from 'ink-divider';
 import { BusRoute } from '../entity/bus-route';
 import { BusStop } from '../entity/bus-stop';
 import { getCityChineseName } from '../util/city';
 import { BusStopDetail } from '../entity/bus-stop-detail';
+import { StopItem } from './components/stop-item';
 
 export interface ShowStopsOfRouteProps {
     onExit?: () => void;
@@ -50,83 +51,75 @@ export const ShowStopsOfRoute: FC<ShowStopsOfRouteProps> = (props) => {
                 const estimateTimes = stopDetails.map(sd => sd.estimateTime).filter(t => t > 0).sort((a, b) => (b - a));
                 if (estimateTimes.length == 0) {
                     return (
-                        <Box width={props.width} key={sequence}>
-                            <Text>{"  "}</Text>
-                            <Text color="black" backgroundColor="white">{"[ 未發車 ]"}</Text>
-                            <Text>{"  "}</Text>
-                            <Text>{stops[0].nameZhTw}</Text>
-                        </Box>
+                        <StopItem
+                            width={props.width} key={sequence}
+                            color="black" backgroundColor="white"
+                            estimateTimeText={"[ 未發車 ]"} name={stops[0].nameZhTw}
+                        />
                     );
                 } else {
                     const estimateTimeByMinutes = Math.floor(estimateTimes[0] / 60);
                     if (estimateTimeByMinutes > 2) {
                         return (
-                            <Box width={props.width} key={sequence}>
-                                <Text>{"  "}</Text>
-                                <Text backgroundColor="blue">{`[ ${estimateTimeByMinutes.toString().padStart(3, ' ')} 分 ]`}</Text>
-                                <Text>{"  "}</Text>
-                                <Text>{stops[0].nameZhTw}</Text>
-                            </Box>
+                            <StopItem
+                                width={props.width} key={sequence}
+                                backgroundColor="blue" name={stops[0].nameZhTw}
+                                estimateTimeText={`[ ${estimateTimeByMinutes.toString().padStart(3, ' ')} 分 ]`}
+                            />
                         );
                     } else {
                         return (
-                            <Box width={props.width} key={sequence}>
-                                <Text>{"  "}</Text>
-                                <Text backgroundColor="magenta">{`[ ${estimateTimeByMinutes.toString().padStart(3, ' ')} 分 ]`}</Text>
-                                <Text>{"  "}</Text>
-                                <Text>{stops[0].nameZhTw}</Text>
-                            </Box>
+                            <StopItem
+                                width={props.width} key={sequence}
+                                backgroundColor="magenta" name={stops[0].nameZhTw}
+                                estimateTimeText={`[ ${estimateTimeByMinutes.toString().padStart(3, ' ')} 分 ]`}
+                            />
                         );
                     }
                 }
             }
             if (stopDetails?.map(sd => sd.status).includes(1)) {
                 return (
-                    <Box width={props.width} key={sequence}>
-                        <Text>{"  "}</Text>
-                        <Text color="black" backgroundColor="white">{"[ 未發車 ]"}</Text>
-                        <Text>{"  "}</Text>
-                        <Text>{stops[0].nameZhTw}</Text>
-                    </Box>
+                    <StopItem
+                        width={props.width} key={sequence}
+                        color="black" backgroundColor="white"
+                        estimateTimeText={"[ 未發車 ]"} name={stops[0].nameZhTw}
+                    />
                 );
             }
             if (stopDetails?.map(sd => sd.status).includes(2)) {
                 return (
-                    <Box width={props.width} key={sequence}>
-                        <Text>{"  "}</Text>
-                        <Text color="black" backgroundColor="yellow">{"[交管不停]"}</Text>
-                        <Text>{"  "}</Text>
-                        <Text>{stops[0].nameZhTw}</Text>
-                    </Box>
+                    <StopItem
+                        width={props.width} key={sequence}
+                        color="black" backgroundColor="yellow"
+                        estimateTimeText={"[交管不停]"} name={stops[0].nameZhTw}
+                    />
                 );
             }
             if (stopDetails?.map(sd => sd.status).includes(3)) {
                 return (
-                    <Box width={props.width} key={sequence}>
-                        <Text>{"  "}</Text>
-                        <Text color="black" backgroundColor="white">{"[末班駛離]"}</Text>
-                        <Text>{"  "}</Text>
-                        <Text>{stops[0].nameZhTw}</Text>
-                    </Box>
+                    <StopItem
+                        width={props.width} key={sequence}
+                        color="black" backgroundColor="white"
+                        estimateTimeText={"[末班駛離]"} name={stops[0].nameZhTw}
+                    />
                 );
             }
             if (stopDetails?.map(sd => sd.status).includes(4)) {
                 return (
-                    <Box width={props.width} key={sequence}>
-                        <Text>{"  "}</Text>
-                        <Text color="black" backgroundColor="white">{"[今日不開]"}</Text>
-                        <Text>{"  "}</Text>
-                        <Text>{stops[0].nameZhTw}</Text>
-                    </Box>
+                    <StopItem
+                        width={props.width} key={sequence}
+                        color="black" backgroundColor="white"
+                        estimateTimeText={"[今日不開]"} name={stops[0].nameZhTw}
+                    />
                 );
             }
             return (
-                <Box width={props.width} key={sequence}>
-                    <Text>{"  "}</Text>
-                    <Text color="gray">{"[ 載入中 ]"}</Text>
-                    <Text>{"  "}</Text>
-                    <Text>{stops[0].nameZhTw}</Text>
-                </Box>
+                <StopItem
+                    width={props.width} key={sequence}
+                    color="gray"
+                    estimateTimeText={"[ 載入中 ]"} name={stops[0].nameZhTw}
+                />
             );
         }).slice(firstStopItemIndex, firstStopItemIndex + (props.height - 5));
 
