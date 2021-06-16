@@ -69,7 +69,8 @@ const App: FC<{ name?: string }> = ({ name = 'Stranger' }) => {
                     route={targetRoute} stopDetails={targetStopDetails}
                     onExit={() => {
                         setAppState(AppState.Main);
-                        setTargetRoute(null);
+                        setTargetRoute(undefined);
+                        setTargetStopDetails(undefined);
                     }}
                 />
             );
