@@ -2,8 +2,8 @@ import React, { FC, useState } from 'react';
 import { Text } from 'ink';
 import Divider from 'ink-divider';
 import { Tab, Tabs } from 'ink-tab';
-import { SearchRoute } from './search-route';
-import { Setting } from './setting';
+import { SearchRoute } from './partial/search-route';
+import { Setting } from './partial/setting';
 
 export interface MainProps {
     onGoToSelectAvailableCities?: () => void;

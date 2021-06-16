@@ -2,10 +2,10 @@ import React, { FC, useState } from 'react';
 import { Text } from 'ink';
 import TextInput from 'ink-text-input';
 import SelectInput from 'ink-select-input';
-import { getRepository, In, Like } from 'typeorm';
-import { BusRoute } from '../entity/bus-route';
-import { getCityChineseName } from '../util/city';
-import { truncateMiddle } from '../util/truncate';
+import { getRepository } from 'typeorm';
+import { BusRoute } from '../../entity/bus-route';
+import { getCityChineseName } from '../../util/city';
+import { truncateMiddle } from '../../util/truncate';
 
 export interface SearchRouteProps {
     onSelect?: ((city: string, routeName: string, routeId: string) => void);

@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 import { Text } from 'ink';
-import TextInput from 'ink-text-input';
 import SelectInput from 'ink-select-input';
 
 export interface SettingProps {
