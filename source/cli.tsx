@@ -13,21 +13,8 @@ import { BusSubRoute } from './entity/bus-sub-route';
 
 const cli = meow(`
     Usage
-      $ bustw-cli
-
-    Options
-        --name  Your name
-
-    Examples
-      $ bustw-cli --name=Jane
-      Hello, Jane
-`, {
-    flags: {
-        name: {
-            type: 'string'
-        }
-    }
-});
+      $ bustw
+`);
 
 (async function main() {
     if (!fs.existsSync(`${os.homedir()}/.bustw-cli`)) {
@@ -48,5 +35,5 @@ const cli = meow(`
         console.log(error);
     }
 
-    render(<App name={cli.flags.name} />);
+    render(<App />);
 })()

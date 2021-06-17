@@ -1,5 +1,4 @@
 import React, { FC, useState } from 'react';
-import { Box } from 'ink';
 import useStdoutDimensions from 'ink-use-stdout-dimensions';
 import { getRepository } from 'typeorm';
 import { BusInfo } from './entity/bus-info';
@@ -17,7 +16,7 @@ enum AppState {
     SelectAvailableCities,
 }
 
-const App: FC<{ name?: string }> = ({ name = 'Stranger' }) => {
+const App: FC<{}> = () => {
     const [width, height] = useStdoutDimensions();
     const [appState, setAppState] = useState(AppState.Main);
     const [availableCities, setAvailableCities] = useState([] as string[]);
