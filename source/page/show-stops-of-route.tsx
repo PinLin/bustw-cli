@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { Box, Text, useInput } from 'ink';
+import { Box, Spacer, Text, useInput } from 'ink';
 import { Tab, Tabs } from 'ink-tab';
 import Divider from 'ink-divider';
 import { BusRoute } from '../entity/bus-route';
@@ -45,8 +45,9 @@ export const ShowStopsOfRoute: FC<ShowStopsOfRouteProps> = (props) => {
         .map(([sequence, stops]) => {
             const stopDetails = props.stopDetails?.filter(sd => stops.map(s => s.id).includes(sd.id))
                 .filter(sd => sd.subRouteId == props.route.subRoutes[subRouteTabIndex].id);
-            const estimateTimeByMinutes = stopDetails.map(sd => sd.estimateTime).filter(t => t > 0)
+            const estimateTimeByMinutes = stopDetails?.map(sd => sd.estimateTime).filter(t => t > 0)
                 .map(t => Math.floor(t / 60)).sort((a, b) => (b - a))?.[0] ?? -1;
+            const buses = stopDetails?.map(sd => sd.buses).flat() ?? []
 
             let color = "gray";
             let backgroundColor = undefined as string;
@@ -62,9 +63,15 @@ export const ShowStopsOfRoute: FC<ShowStopsOfRouteProps> = (props) => {
                     backgroundColor = "blue";
                     estimateTimeText = `[ ${estimateTimeByMinutes.toString().padStart(3, ' ')} 分 ]`;
                 } else {
-                    color = "white";
-                    backgroundColor = "magenta";
-                    estimateTimeText = `[ ${estimateTimeByMinutes.toString().padStart(3, ' ')} 分 ]`;
+                    if (buses.map(b => b.approaching).includes(1)) {
+                        color = "white";
+                        backgroundColor = "red";
+                        estimateTimeText = "[ 進站中 ]";
+                    } else {
+                        color = "white";
+                        backgroundColor = "magenta";
+                        estimateTimeText = `[ ${estimateTimeByMinutes.toString().padStart(3, ' ')} 分 ]`;
+                    }
                 }
             } else if (stopDetails?.map(sd => sd.status).includes(1)) {
                 color = "black";
@@ -91,6 +98,8 @@ export const ShowStopsOfRoute: FC<ShowStopsOfRouteProps> = (props) => {
                     >{estimateTimeText}</Text>
                     <Text>  </Text>
                     <Text>{stops[0].nameZhTw}</Text>
+                    <Spacer />
+                    <Text>{[...(new Set(buses.map(b => b.plateNumber)))].map(pn => `[${pn}] `)}</Text>
                 </Box>
             );
         }).slice(firstStopItemIndex, firstStopItemIndex + (props.height - 5));

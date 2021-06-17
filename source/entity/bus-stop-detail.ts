@@ -1,3 +1,5 @@
+import { Bus } from './bus';
+
 export class BusStopDetail {
   id: string;
 
@@ -7,12 +9,5 @@ export class BusStopDetail {
 
   estimateTime: number;
 
-  buses: {
-    plateNumber: string;
-
-    status: number;
-
-    approaching: number;
-  }[];
-
+  buses: Bus[];
 }
