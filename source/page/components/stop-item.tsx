@@ -11,7 +11,7 @@ export interface StopItemProps extends Props {
 
 export const StopItem: FC<StopItemProps> = (props) => {
     return (
-        <Box width={props.width} key={props.key}>
+        <Box width={props.width}>
             <Text>  </Text>
             <Text
                 color={props.color} backgroundColor={props.backgroundColor}
