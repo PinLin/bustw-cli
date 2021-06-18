@@ -53,25 +53,19 @@ export const ShowStopsOfRoute: FC<ShowStopsOfRouteProps> = (props) => {
             let backgroundColor = undefined as string;
             let estimateTimeText = "[ 載入中 ]";
 
-            if (stopDetails?.map(sd => sd.status).includes(0)) {
-                if (estimateTimeByMinutes == -1) {
-                    color = "black";
-                    backgroundColor = "white";
-                    estimateTimeText = "[ 未發車 ]";
-                } else if (estimateTimeByMinutes > 2) {
+            if (buses.map(b => b.approaching).includes(1)) {
+                color = "white";
+                backgroundColor = "red";
+                estimateTimeText = "[ 進站中 ]";
+            } else if (estimateTimeByMinutes != -1) {
+                if (estimateTimeByMinutes > 2) {
                     color = "white";
                     backgroundColor = "blue";
                     estimateTimeText = `[ ${estimateTimeByMinutes.toString().padStart(3, ' ')} 分 ]`;
                 } else {
-                    if (buses.map(b => b.approaching).includes(1)) {
-                        color = "white";
-                        backgroundColor = "red";
-                        estimateTimeText = "[ 進站中 ]";
-                    } else {
-                        color = "white";
-                        backgroundColor = "magenta";
-                        estimateTimeText = `[ ${estimateTimeByMinutes.toString().padStart(3, ' ')} 分 ]`;
-                    }
+                    color = "white";
+                    backgroundColor = "magenta";
+                    estimateTimeText = `[ ${estimateTimeByMinutes.toString().padStart(3, ' ')} 分 ]`;
                 }
             } else if (stopDetails?.map(sd => sd.status).includes(1)) {
                 color = "black";
