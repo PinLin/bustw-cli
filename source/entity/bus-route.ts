@@ -18,13 +18,13 @@ export class BusRoute {
   @Column()
   departureStopNameZhTw?: string;
 
-  @Column()
+  @Column({ nullable: true })
   departureStopNameEn?: string;
 
   @Column()
   destinationStopNameZhTw?: string;
 
-  @Column()
+  @Column({ nullable: true })
   destinationStopNameEn?: string;
 
   @Column()
