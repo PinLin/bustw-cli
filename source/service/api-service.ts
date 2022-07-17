@@ -3,7 +3,7 @@ import { GetBusRoutesDto } from '../dto/get-bus-routes';
 import { GetBusInfoDto } from '../dto/get-bus-info';
 import { GetBusStopsDto } from '../dto/get-bus-stops';
 
-const host = 'https://bustw.ntut.com.tw'
+const host = 'https://bus.pinlin.me'
 
 export async function getBusInfo(city: string) {
   const response = await axios.get(encodeURI(`${host}/bus/city/${city}`));
